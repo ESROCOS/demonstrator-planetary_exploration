@@ -1,0 +1,8 @@
+ASNACN_DIR: dataview/
+INSTALLED_TYPES_DIR: installed_types/
+PROJECT_NAME: demonstrator-planetary_exploration
+deps:
+- types/base: ''
+- types/core: ''
+- types/driver: ''
+- types/sensor_samples: ''
