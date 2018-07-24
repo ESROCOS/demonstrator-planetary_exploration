@@ -4,3 +4,6 @@ PROJECT_NAME: demonstrator-planetary_exploration
 deps:
 - types/base: ''
 - types/base_support: ''
+- plex/blsclient: ''
+- drivers/taste/controldev:
+- tools/dispatchers:
