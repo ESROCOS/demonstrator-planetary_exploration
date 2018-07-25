@@ -496,7 +496,7 @@ END interfaceview::IV::MotionCommandDispatcher;
 PACKAGE interfaceview::IV::blsclient
 PUBLIC
 
-WITH interfaceview::IV::PoseVisualisation::remapper;
+WITH interfaceview::IV::vizkit3drobotpose;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -516,7 +516,7 @@ END PI_motion_command.others;
 
 SUBPROGRAM RI_rigidBodyState
 FEATURES
-  rbs_in : IN PARAMETER DataView::Base_samples_RigidBodyState {
+  rbs : IN PARAMETER DataView::Base_samples_RigidBodyState {
     Taste::encoding => NATIVE;
   };
 END RI_rigidBodyState;
@@ -533,7 +533,7 @@ FEATURES
     Taste::Deadline => 10 ms;
     Taste::InterfaceName => "motion_command";
   };
-  RI_rigidBodyState : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::PoseVisualisation::remapper::PI_rbs_in.others {
+  RI_rigidBodyState : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::vizkit3drobotpose::PI_updateRigidBodyState.others {
     Taste::coordinates => "205664 96850";
     Taste::RCMoperationKind => any;
     Taste::InterfaceName => "rigidBodyState";
@@ -554,7 +554,7 @@ END blsclient.others;
 
 END interfaceview::IV::blsclient;
 
-PACKAGE interfaceview::IV::PoseVisualisation::vizkit3drobotpose
+PACKAGE interfaceview::IV::vizkit3drobotpose
 PUBLIC
 
 WITH Taste;
@@ -576,8 +576,8 @@ END PI_updateRigidBodyState.others;
 
 SYSTEM vizkit3drobotpose
 FEATURES
-  PI_updateRigidBodyState : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::PoseVisualisation::vizkit3drobotpose::PI_updateRigidBodyState.others {
-    Taste::coordinates => "239198 93907";
+  PI_updateRigidBodyState : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::vizkit3drobotpose::PI_updateRigidBodyState.others {
+    Taste::coordinates => "224876 96691";
     Taste::RCMoperationKind => sporadic;
     Taste::RCMperiod => 0 ms;
     Taste::Deadline => 0 ms;
@@ -602,296 +602,7 @@ SUBCOMPONENTS
   };
 END vizkit3drobotpose.others;
 
-END interfaceview::IV::PoseVisualisation::vizkit3drobotpose;
-
-PACKAGE interfaceview::IV::PoseVisualisation::vizkit3dmarkerpose
-PUBLIC
-
-WITH Taste;
-WITH DataView;
-WITH TASTE_IV_Properties;
-SUBPROGRAM PI_updateRigidBodyState
-FEATURES
-  rbstate : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => NATIVE;
-  };
-PROPERTIES
-  Taste::Associated_Queue_Size => 1;
-END PI_updateRigidBodyState;
-
-SUBPROGRAM IMPLEMENTATION PI_updateRigidBodyState.others
-PROPERTIES
-  Compute_Execution_Time => 0 ms .. 0 ms;
-END PI_updateRigidBodyState.others;
-
-SYSTEM vizkit3dmarkerpose
-FEATURES
-  PI_updateRigidBodyState : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::PoseVisualisation::vizkit3dmarkerpose::PI_updateRigidBodyState.others {
-    Taste::coordinates => "239429 99542";
-    Taste::RCMoperationKind => sporadic;
-    Taste::RCMperiod => 0 ms;
-    Taste::Deadline => 0 ms;
-    Taste::InterfaceName => "updateRigidBodyState";
-  };
-PROPERTIES
-  Source_Language => (CPP);
-  Taste::Active_Interfaces => enabled;
-  Source_Text => ("/home/taste/esrocos_workspace/install/share/taste_components/plex-pose_visualisation/vizkit3dmarkerpose.zip");
-END vizkit3dmarkerpose;
-
-SYSTEM IMPLEMENTATION vizkit3dmarkerpose.others
-SUBCOMPONENTS
-  configFile : DATA DataView::Vizkit3D_FilePath {
-    Taste::FS_Default_Value => """config-bodystate.yml""";
-  };
-  id : DATA DataView::Vizkit3D_PluginLabel {
-    Taste::FS_Default_Value => """markerPose""";
-  };
-  compilerOption : DATA DataView::Taste_directive {
-    Taste::FS_Default_Value => "compiler-option:""-DOROCOS_TARGET=gnulinux""";
-  };
-END vizkit3dmarkerpose.others;
-
-END interfaceview::IV::PoseVisualisation::vizkit3dmarkerpose;
-
-PACKAGE interfaceview::IV::PoseVisualisation::remapper
-PUBLIC
-
-WITH interfaceview::IV::PoseVisualisation::vizkit3drobotpose;
-WITH interfaceview::IV::PoseVisualisation::vizkit3dmarkerpose;
-WITH Taste;
-WITH DataView;
-WITH TASTE_IV_Properties;
-SUBPROGRAM PI_rbs_in
-FEATURES
-  rbs : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => NATIVE;
-  };
-PROPERTIES
-  Taste::Associated_Queue_Size => 1;
-END PI_rbs_in;
-
-SUBPROGRAM IMPLEMENTATION PI_rbs_in.others
-PROPERTIES
-  Compute_Execution_Time => 0 ms .. 0 ms;
-END PI_rbs_in.others;
-
-SUBPROGRAM PI_mbs_in
-FEATURES
-  mbs : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => NATIVE;
-  };
-PROPERTIES
-  Taste::Associated_Queue_Size => 1;
-END PI_mbs_in;
-
-SUBPROGRAM IMPLEMENTATION PI_mbs_in.others
-PROPERTIES
-  Compute_Execution_Time => 0 ms .. 0 ms;
-END PI_mbs_in.others;
-
-SUBPROGRAM RI_rbs_out
-FEATURES
-  rbstate : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => NATIVE;
-  };
-END RI_rbs_out;
-
-SUBPROGRAM IMPLEMENTATION RI_rbs_out.others
-END RI_rbs_out.others;
-
-SUBPROGRAM RI_mbs_out
-FEATURES
-  rbstate : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => NATIVE;
-  };
-END RI_mbs_out;
-
-SUBPROGRAM IMPLEMENTATION RI_mbs_out.others
-END RI_mbs_out.others;
-
-SYSTEM remapper
-FEATURES
-  PI_rbs_in : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::PoseVisualisation::remapper::PI_rbs_in.others {
-    Taste::coordinates => "227515 91971";
-    Taste::RCMoperationKind => sporadic;
-    Taste::RCMperiod => 0 ms;
-    Taste::Deadline => 0 ms;
-    Taste::InterfaceName => "rbs_in";
-  };
-  PI_mbs_in : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::PoseVisualisation::remapper::PI_mbs_in.others {
-    Taste::coordinates => "227515 98271";
-    Taste::RCMoperationKind => unprotected;
-    Taste::RCMperiod => 0 ms;
-    Taste::Deadline => 0 ms;
-    Taste::InterfaceName => "mbs_in";
-  };
-  RI_rbs_out : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::PoseVisualisation::vizkit3drobotpose::PI_updateRigidBodyState.others {
-    Taste::coordinates => "234135 91971";
-    Taste::RCMoperationKind => any;
-    Taste::InterfaceName => "rbs_out";
-    Taste::labelInheritance => "true";
-  };
-  RI_mbs_out : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::PoseVisualisation::vizkit3dmarkerpose::PI_updateRigidBodyState.others {
-    Taste::coordinates => "234135 96696";
-    Taste::RCMoperationKind => any;
-    Taste::InterfaceName => "mbs_out";
-    Taste::labelInheritance => "true";
-  };
-PROPERTIES
-  Source_Language => (CPP);
-  Taste::Active_Interfaces => any;
-  Source_Text => ("/home/taste/esrocos_workspace/install/share/taste_components/plex-pose_visualisation/remapper.zip");
-END remapper;
-
-SYSTEM IMPLEMENTATION remapper.others
-END remapper.others;
-
-END interfaceview::IV::PoseVisualisation::remapper;
-
-PACKAGE interfaceview::IV::PoseVisualisation
-PUBLIC
-
-WITH interfaceview::IV::PoseVisualisation::vizkit3drobotpose;
-WITH interfaceview::IV::PoseVisualisation::vizkit3dmarkerpose;
-WITH interfaceview::IV::PoseVisualisation::remapper;
-WITH Taste;
-WITH DataView;
-WITH TASTE_IV_Properties;
-SUBPROGRAM PI_mbs_in
-FEATURES
-  mbs : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => NATIVE;
-  };
-PROPERTIES
-  Taste::Associated_Queue_Size => 1;
-END PI_mbs_in;
-
-SUBPROGRAM IMPLEMENTATION PI_mbs_in.others
-PROPERTIES
-  Compute_Execution_Time => 0 ms .. 0 ms;
-END PI_mbs_in.others;
-
-SUBPROGRAM PI_rbs_in
-FEATURES
-  rbs : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => NATIVE;
-  };
-PROPERTIES
-  Taste::Associated_Queue_Size => 1;
-END PI_rbs_in;
-
-SUBPROGRAM IMPLEMENTATION PI_rbs_in.others
-PROPERTIES
-  Compute_Execution_Time => 0 ms .. 0 ms;
-END PI_rbs_in.others;
-
-SYSTEM PoseVisualisation
-FEATURES
-  PI_mbs_in : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::PoseVisualisation::remapper::PI_mbs_in.others {
-    Taste::coordinates => "221569 97321";
-    Taste::RCMoperationKind => unprotected;
-    Taste::RCMperiod => 0 ms;
-    Taste::Deadline => 0 ms;
-    Taste::InterfaceName => "mbs_in";
-  };
-  PI_rbs_in : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::PoseVisualisation::remapper::PI_rbs_in.others {
-    Taste::coordinates => "221569 92596";
-    Taste::RCMoperationKind => sporadic;
-    Taste::RCMperiod => 0 ms;
-    Taste::Deadline => 0 ms;
-    Taste::InterfaceName => "rbs_in";
-  };
-PROPERTIES
-  Source_Language => (C);
-  Taste::Active_Interfaces => any;
-END PoseVisualisation;
-
-SYSTEM IMPLEMENTATION PoseVisualisation.others
-SUBCOMPONENTS
--- [ interfaceview::IV::PoseVisualisation::PoseVisualisation.others.vizkit3drobotpose - text 
---vizkit3d plugin RigidBodyStateVisualization. 
---]
-  vizkit3drobotpose : SYSTEM interfaceview::IV::PoseVisualisation::vizkit3drobotpose::vizkit3drobotpose.others {
-    Taste::coordinates => "239198 90757 245192 95389";
-  };
--- [ interfaceview::IV::PoseVisualisation::PoseVisualisation.others.vizkit3dmarkerpose - text 
---vizkit3d plugin RigidBodyStateVisualization. 
---]
-  vizkit3dmarkerpose : SYSTEM interfaceview::IV::PoseVisualisation::vizkit3dmarkerpose::vizkit3dmarkerpose.others {
-    Taste::coordinates => "239429 96392 245423 101024";
-  };
-  remapper : SYSTEM interfaceview::IV::PoseVisualisation::remapper::remapper.others {
-    Taste::coordinates => "227515 91971 234135 100401";
-  };
-CONNECTIONS
-  vizkit3drobotpose_PI_updateRigidBodyState_remapper_RI_rbs_out : SUBPROGRAM ACCESS vizkit3drobotpose.PI_updateRigidBodyState -> remapper.RI_rbs_out {
-    Taste::coordinates => "234135 91971 236666 91971 236666 93907 239198 93907";
-  };
-  vizkit3dmarkerpose_PI_updateRigidBodyState_remapper_RI_mbs_out : SUBPROGRAM ACCESS vizkit3dmarkerpose.PI_updateRigidBodyState -> remapper.RI_mbs_out {
-    Taste::coordinates => "234135 96696 236782 96696 236782 99542 239429 99542";
-  };
-  remapper_PI_rbs_in_PoseVisualisation_PI_rbs_in : SUBPROGRAM ACCESS remapper.PI_rbs_in -> PI_rbs_in {
-    Taste::coordinates => "221569 92596 227061 92596 227061 91971 227515 91971";
-  };
-  remapper_PI_mbs_in_PoseVisualisation_PI_mbs_in : SUBPROGRAM ACCESS remapper.PI_mbs_in -> PI_mbs_in {
-    Taste::coordinates => "221569 97321 227061 97321 227061 98271 227515 98271";
-  };
-END PoseVisualisation.others;
-
-END interfaceview::IV::PoseVisualisation;
-
-PACKAGE interfaceview::IV::dummyproducer
-PUBLIC
-
-WITH interfaceview::IV::PoseVisualisation::remapper;
-WITH Taste;
-WITH DataView;
-WITH TASTE_IV_Properties;
-SUBPROGRAM PI_clock
-PROPERTIES
-  Taste::Associated_Queue_Size => 1;
-END PI_clock;
-
-SUBPROGRAM IMPLEMENTATION PI_clock.others
-PROPERTIES
-  Compute_Execution_Time => 0 ms .. 1000 ms;
-END PI_clock.others;
-
-SUBPROGRAM RI_updatemarkerpose
-FEATURES
-  mbs : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => NATIVE;
-  };
-END RI_updatemarkerpose;
-
-SUBPROGRAM IMPLEMENTATION RI_updatemarkerpose.others
-END RI_updatemarkerpose.others;
-
-SYSTEM dummyproducer
-FEATURES
-  PI_clock : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::dummyproducer::PI_clock.others {
-    Taste::coordinates => "185507 109603";
-    Taste::RCMoperationKind => cyclic;
-    Taste::RCMperiod => 1000 ms;
-    Taste::Deadline => 1000 ms;
-    Taste::InterfaceName => "clock";
-  };
-  RI_updatemarkerpose : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::PoseVisualisation::remapper::PI_mbs_in.others {
-    Taste::coordinates => "210861 117478";
-    Taste::RCMoperationKind => any;
-    Taste::InterfaceName => "updatemarkerpose";
-    Taste::labelInheritance => "false";
-  };
-PROPERTIES
-  Source_Language => (CPP);
-  Taste::Active_Interfaces => any;
-END dummyproducer;
-
-SYSTEM IMPLEMENTATION dummyproducer.others
-END dummyproducer.others;
-
-END interfaceview::IV::dummyproducer;
+END interfaceview::IV::vizkit3drobotpose;
 
 PACKAGE interfaceview::IV
 PUBLIC
@@ -905,8 +616,7 @@ WITH interfaceview::IV::dump_joint_commands;
 WITH interfaceview::IV::motion_command2d_logger;
 WITH interfaceview::IV::MotionCommandDispatcher;
 WITH interfaceview::IV::blsclient;
-WITH interfaceview::IV::PoseVisualisation;
-WITH interfaceview::IV::dummyproducer;
+WITH interfaceview::IV::vizkit3drobotpose;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -945,11 +655,11 @@ SUBCOMPONENTS
   blsclient : SYSTEM interfaceview::IV::blsclient::blsclient.others {
     Taste::coordinates => "183932 87400 205664 101258";
   };
-  PoseVisualisation : SYSTEM interfaceview::IV::PoseVisualisation::PoseVisualisation.others {
-    Taste::coordinates => "221569 89446 263300 103304";
-  };
-  dummyproducer : SYSTEM interfaceview::IV::dummyproducer::dummyproducer.others {
-    Taste::coordinates => "183932 109603 210861 122674";
+-- [ interfaceview::IV::interfaceview.others.vizkit3drobotpose - text 
+--vizkit3d plugin RigidBodyStateVisualization. 
+--]
+  vizkit3drobotpose : SYSTEM interfaceview::IV::vizkit3drobotpose::vizkit3drobotpose.others {
+    Taste::coordinates => "224876 88816 240568 100942";
   };
 CONNECTIONS
   JoystickCommandDispatcher_PI_dispatch_controldevice_RI_commands : SUBPROGRAM ACCESS JoystickCommandDispatcher.PI_dispatch -> controldevice.RI_commands {
@@ -976,11 +686,8 @@ CONNECTIONS
   blsclient_PI_motion_command_MotionCommandDispatcher_RI_sample : SUBPROGRAM ACCESS blsclient.PI_motion_command -> MotionCommandDispatcher.RI_sample {
     Taste::coordinates => "170074 96377 177318 96377 177318 90550 183932 90550";
   };
-  PoseVisualisation_PI_rbs_in_blsclient_RI_rigidBodyState : SUBPROGRAM ACCESS PoseVisualisation.PI_rbs_in -> blsclient.RI_rigidBodyState {
-    Taste::coordinates => "205664 96850 213616 96850 213616 92596 221569 92596";
-  };
-  PoseVisualisation_PI_mbs_in_dummyproducer_RI_updatemarkerpose : SUBPROGRAM ACCESS PoseVisualisation.PI_mbs_in -> dummyproducer.RI_updatemarkerpose {
-    Taste::coordinates => "210861 117478 216215 117478 216215 97321 221569 97321";
+  vizkit3drobotpose_PI_updateRigidBodyState_blsclient_RI_rigidBodyState : SUBPROGRAM ACCESS vizkit3drobotpose.PI_updateRigidBodyState -> blsclient.RI_rigidBodyState {
+    Taste::coordinates => "205664 96850 215270 96850 215270 96691 224876 96691";
   };
 END interfaceview.others;
 

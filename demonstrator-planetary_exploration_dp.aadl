@@ -117,10 +117,7 @@ WITH interfaceview::IV::joystick_2_motion_command;
 WITH interfaceview::IV::dump_joint_commands;
 WITH interfaceview::IV::motion_command2d_logger;
 WITH interfaceview::IV::MotionCommandDispatcher;
-WITH interfaceview::IV::PoseVisualisation::vizkit3drobotpose;
-WITH interfaceview::IV::PoseVisualisation::vizkit3dmarkerpose;
-WITH interfaceview::IV::PoseVisualisation::remapper;
-WITH interfaceview::IV::dummyproducer;
+WITH interfaceview::IV::vizkit3drobotpose;
 WITH ocarina_processors_x86;
 WITH deploymentview::DV::remote_control_pc;
 WITH interfaceview::IV::blsclient;
@@ -161,17 +158,8 @@ SUBCOMPONENTS
   IV_MotionCommandDispatcher : SYSTEM interfaceview::IV::MotionCommandDispatcher::MotionCommandDispatcher.others {
     Taste::FunctionName => "MotionCommandDispatcher";
   };
-  IV_vizkit3drobotpose : SYSTEM interfaceview::IV::PoseVisualisation::vizkit3drobotpose::vizkit3drobotpose.others {
+  IV_vizkit3drobotpose : SYSTEM interfaceview::IV::vizkit3drobotpose::vizkit3drobotpose.others {
     Taste::FunctionName => "vizkit3drobotpose";
-  };
-  IV_vizkit3dmarkerpose : SYSTEM interfaceview::IV::PoseVisualisation::vizkit3dmarkerpose::vizkit3dmarkerpose.others {
-    Taste::FunctionName => "vizkit3dmarkerpose";
-  };
-  IV_remapper : SYSTEM interfaceview::IV::PoseVisualisation::remapper::remapper.others {
-    Taste::FunctionName => "remapper";
-  };
-  IV_dummyproducer : SYSTEM interfaceview::IV::dummyproducer::dummyproducer.others {
-    Taste::FunctionName => "dummyproducer";
   };
   remote_control : PROCESS deploymentview::DV::remote_control_pc::remote_control.others {
     Taste::coordinates => "92815 55170 122143 82255";
@@ -194,9 +182,6 @@ PROPERTIES
   Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_motion_command2d_logger;
   Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_MotionCommandDispatcher;
   Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_vizkit3drobotpose;
-  Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_vizkit3dmarkerpose;
-  Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_remapper;
-  Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_dummyproducer;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO remote_control;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO generic_sockets_ip_pohic;
 END remote_control_pc.others;
@@ -289,7 +274,7 @@ PROPERTIES
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.gr740_candriver_PI_commands_joystick_2_joint_commands_RI_joint_commands;
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.dump_joint_commands_PI_commands_gr740_candriver_RI_samples;
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.blsclient_PI_motion_command_MotionCommandDispatcher_RI_sample;
-  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.PoseVisualisation_PI_rbs_in_blsclient_RI_rigidBodyState;
+  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.vizkit3drobotpose_PI_updateRigidBodyState_blsclient_RI_rigidBodyState;
 END deploymentview.others;
 
 PROPERTIES
