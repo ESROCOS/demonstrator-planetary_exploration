@@ -5,5 +5,10 @@ deps:
 - types/base: ''
 - types/base_support: ''
 - plex/blsclient: ''
+- types/controldev: ''
 - drivers/taste/controldev:
 - tools/dispatchers:
+- gr740/candriver: ''
+- tools/data_logger_components: ''
+- plex/pose_visualisation: ''
+#- types/vizkit3d: ''

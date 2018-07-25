@@ -5,9 +5,908 @@
 -- generated code: do not edit
 ---------------------------------------------------
 
+PACKAGE interfaceview::IV::controldevice
+PUBLIC
+
+WITH interfaceview::IV::JoystickCommandDispatcher;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_update
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_update;
+
+SUBPROGRAM IMPLEMENTATION PI_update.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_update.others;
+
+SUBPROGRAM RI_commands
+FEATURES
+  sample : IN PARAMETER DataView::JoystickCommand {
+    Taste::encoding => NATIVE;
+  };
+END RI_commands;
+
+SUBPROGRAM IMPLEMENTATION RI_commands.others
+END RI_commands.others;
+
+SYSTEM controldevice
+FEATURES
+  PI_update : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::controldevice::PI_update.others {
+    Taste::coordinates => "82517 62834";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 100 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "update";
+  };
+  RI_commands : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::JoystickCommandDispatcher::PI_dispatch.others {
+    Taste::coordinates => "103337 70709";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "commands";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (CPP);
+  Taste::Active_Interfaces => any;
+  Source_Text => ("/home/taste/esrocos_workspace/install/drivers/taste/controldev/controldevice.zip");
+END controldevice;
+
+SYSTEM IMPLEMENTATION controldevice.others
+SUBCOMPONENTS
+  device_number : DATA DataView::T_UInt16 {
+    Taste::FS_Default_Value => "1";
+  };
+END controldevice.others;
+
+END interfaceview::IV::controldevice;
+
+PACKAGE interfaceview::IV::JoystickCommandDispatcher
+PUBLIC
+
+WITH interfaceview::IV::joystick_2_joint_commands;
+WITH interfaceview::IV::joystick_2_motion_command;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_dispatch
+FEATURES
+  sample : IN PARAMETER DataView::JoystickCommand {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_dispatch;
+
+SUBPROGRAM IMPLEMENTATION PI_dispatch.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_dispatch.others;
+
+SUBPROGRAM RI_sample
+FEATURES
+  cmd : IN PARAMETER DataView::JoystickCommand {
+    Taste::encoding => NATIVE;
+  };
+END RI_sample;
+
+SUBPROGRAM IMPLEMENTATION RI_sample.others
+END RI_sample.others;
+
+SUBPROGRAM RI_sample1
+FEATURES
+  cmd : IN PARAMETER DataView::JoystickCommand {
+    Taste::encoding => NATIVE;
+  };
+END RI_sample1;
+
+SUBPROGRAM IMPLEMENTATION RI_sample1.others
+END RI_sample1.others;
+
+SYSTEM JoystickCommandDispatcher
+FEATURES
+  PI_dispatch : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::JoystickCommandDispatcher::PI_dispatch.others {
+    Taste::coordinates => "115902 63305";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "dispatch";
+  };
+  RI_sample : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::joystick_2_joint_commands::PI_commands.others {
+    Taste::coordinates => "137477 62676";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "sample";
+    Taste::labelInheritance => "false";
+  };
+  RI_sample1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::joystick_2_motion_command::PI_commands.others {
+    Taste::coordinates => "126139 77163";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "sample1";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+  Source_Text => ("/home/taste/esrocos_workspace/install/share/taste_components/dispatchers/joystickcommanddispatcher.zip");
+END JoystickCommandDispatcher;
+
+SYSTEM IMPLEMENTATION JoystickCommandDispatcher.others
+END JoystickCommandDispatcher.others;
+
+END interfaceview::IV::JoystickCommandDispatcher;
+
+PACKAGE interfaceview::IV::joystick_2_joint_commands
+PUBLIC
+
+WITH interfaceview::IV::gr740_candriver;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_commands
+FEATURES
+  cmd : IN PARAMETER DataView::JoystickCommand {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_commands;
+
+SUBPROGRAM IMPLEMENTATION PI_commands.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_commands.others;
+
+SUBPROGRAM RI_joint_commands
+FEATURES
+  cmds : IN PARAMETER DataView::Base_commands_Joints {
+    Taste::encoding => UPER;
+  };
+END RI_joint_commands;
+
+SUBPROGRAM IMPLEMENTATION RI_joint_commands.others
+END RI_joint_commands.others;
+
+SYSTEM joystick_2_joint_commands
+FEATURES
+  PI_commands : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::joystick_2_joint_commands::PI_commands.others {
+    Taste::coordinates => "150390 61101";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "commands";
+  };
+  RI_joint_commands : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::gr740_candriver::PI_commands.others {
+    Taste::coordinates => "172751 74172";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "joint_commands";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (CPP);
+  Taste::Active_Interfaces => any;
+  Source_Text => ("/home/taste/esrocos_workspace/install/drivers/taste/controldev/joystick_2_joint_commands.zip");
+END joystick_2_joint_commands;
+
+SYSTEM IMPLEMENTATION joystick_2_joint_commands.others
+SUBCOMPONENTS
+  max_rotation_speed : DATA DataView::T_Double {
+    Taste::FS_Default_Value => "6";
+  };
+END joystick_2_joint_commands.others;
+
+END interfaceview::IV::joystick_2_joint_commands;
+
+PACKAGE interfaceview::IV::joystick_2_motion_command
+PUBLIC
+
+WITH interfaceview::IV::MotionCommandDispatcher;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_commands
+FEATURES
+  cmd : IN PARAMETER DataView::JoystickCommand {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_commands;
+
+SUBPROGRAM IMPLEMENTATION PI_commands.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_commands.others;
+
+SUBPROGRAM RI_motion_commands
+FEATURES
+  sample : IN PARAMETER DataView::Base_commands_Motion2D {
+    Taste::encoding => NATIVE;
+  };
+END RI_motion_commands;
+
+SUBPROGRAM IMPLEMENTATION RI_motion_commands.others
+END RI_motion_commands.others;
+
+SYSTEM joystick_2_motion_command
+FEATURES
+  PI_commands : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::joystick_2_motion_command::PI_commands.others {
+    Taste::coordinates => "126768 85037";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "commands";
+  };
+  RI_motion_commands : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::MotionCommandDispatcher::PI_dispatch_motion_command.others {
+    Taste::coordinates => "137792 99526";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "motion_commands";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (CPP);
+  Taste::Active_Interfaces => any;
+  Source_Text => ("/home/taste/esrocos_workspace/install/drivers/taste/controldev/joystick_2_motion_command.zip");
+END joystick_2_motion_command;
+
+SYSTEM IMPLEMENTATION joystick_2_motion_command.others
+SUBCOMPONENTS
+  max_rotation_speed : DATA DataView::T_Double {
+    Taste::FS_Default_Value => "90";
+  };
+  max_translation_speed : DATA DataView::T_Double {
+    Taste::FS_Default_Value => "0.01";
+  };
+END joystick_2_motion_command.others;
+
+END interfaceview::IV::joystick_2_motion_command;
+
+PACKAGE interfaceview::IV::gr740_candriver
+PUBLIC
+
+WITH interfaceview::IV::dump_joint_commands;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_update
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_update;
+
+SUBPROGRAM IMPLEMENTATION PI_update.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_update.others;
+
+SUBPROGRAM PI_commands
+FEATURES
+  cmds : IN PARAMETER DataView::Base_commands_Joints {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_commands;
+
+SUBPROGRAM IMPLEMENTATION PI_commands.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_commands.others;
+
+SUBPROGRAM RI_samples
+FEATURES
+  cmd : IN PARAMETER DataView::Base_commands_Joints {
+    Taste::encoding => UPER;
+  };
+END RI_samples;
+
+SUBPROGRAM IMPLEMENTATION RI_samples.others
+END RI_samples.others;
+
+SYSTEM gr740_candriver
+FEATURES
+  PI_update : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::gr740_candriver::PI_update.others {
+    Taste::coordinates => "187397 71338";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 100 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "update";
+  };
+  PI_commands : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::gr740_candriver::PI_commands.others {
+    Taste::coordinates => "187397 63463";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "commands";
+  };
+  RI_samples : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::dump_joint_commands::PI_commands.others {
+    Taste::coordinates => "208183 73700";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "samples";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+  Source_Text => ("/home/taste/esrocos_workspace/install/gr740/candriver/gr740_candriver.zip");
+END gr740_candriver;
+
+SYSTEM IMPLEMENTATION gr740_candriver.others
+SUBCOMPONENTS
+  flagsToCompileWith : DATA DataView::Taste_directive {
+    Taste::FS_Default_Value => "compiler-option: ""-I/opt/rtems-5.1-2018.03.08/sparc-rtems5/gr740/lib/include -DCONFIGURE_DRIVER_AMBAPP_GAISLER_GRCAN""";
+  };
+END gr740_candriver.others;
+
+END interfaceview::IV::gr740_candriver;
+
+PACKAGE interfaceview::IV::dump_joint_commands
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_commands
+FEATURES
+  cmd : IN PARAMETER DataView::Base_commands_Joints {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_commands;
+
+SUBPROGRAM IMPLEMENTATION PI_commands.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_commands.others;
+
+SYSTEM dump_joint_commands
+FEATURES
+  PI_commands : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::dump_joint_commands::PI_commands.others {
+    Taste::coordinates => "221569 63463";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "commands";
+  };
+PROPERTIES
+  Source_Language => (CPP);
+  Taste::Active_Interfaces => any;
+  Source_Text => ("/home/taste/esrocos_workspace/install/drivers/taste/controldev/dump_joint_commands.zip");
+END dump_joint_commands;
+
+SYSTEM IMPLEMENTATION dump_joint_commands.others
+END dump_joint_commands.others;
+
+END interfaceview::IV::dump_joint_commands;
+
+PACKAGE interfaceview::IV::motion_command2d_logger
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_sample
+FEATURES
+  sample : IN PARAMETER DataView::Base_commands_Motion2D {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_sample;
+
+SUBPROGRAM IMPLEMENTATION PI_sample.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_sample.others;
+
+SYSTEM motion_command2d_logger
+FEATURES
+  PI_sample : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::motion_command2d_logger::PI_sample.others {
+    Taste::coordinates => "159366 111808";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "sample";
+  };
+PROPERTIES
+  Source_Language => (CPP);
+  Taste::Active_Interfaces => any;
+  Source_Text => ("/home/taste/esrocos_workspace/install/share/taste_components/data_loggers/motion_command2d_logger.zip");
+END motion_command2d_logger;
+
+SYSTEM IMPLEMENTATION motion_command2d_logger.others
+END motion_command2d_logger.others;
+
+END interfaceview::IV::motion_command2d_logger;
+
+PACKAGE interfaceview::IV::MotionCommandDispatcher
+PUBLIC
+
+WITH interfaceview::IV::blsclient;
+WITH interfaceview::IV::motion_command2d_logger;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_dispatch_motion_command
+FEATURES
+  sample : IN PARAMETER DataView::Base_commands_Motion2D {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_dispatch_motion_command;
+
+SUBPROGRAM IMPLEMENTATION PI_dispatch_motion_command.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_dispatch_motion_command.others;
+
+SUBPROGRAM RI_sample
+FEATURES
+  mc : IN PARAMETER DataView::Base_commands_Motion2D {
+    Taste::encoding => NATIVE;
+  };
+END RI_sample;
+
+SUBPROGRAM IMPLEMENTATION RI_sample.others
+END RI_sample.others;
+
+SUBPROGRAM RI_sample1
+FEATURES
+  sample : IN PARAMETER DataView::Base_commands_Motion2D {
+    Taste::encoding => NATIVE;
+  };
+END RI_sample1;
+
+SUBPROGRAM IMPLEMENTATION RI_sample1.others
+END RI_sample1.others;
+
+SYSTEM MotionCommandDispatcher
+FEATURES
+  PI_dispatch_motion_command : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::MotionCommandDispatcher::PI_dispatch_motion_command.others {
+    Taste::coordinates => "149602 88818";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "dispatch_motion_command";
+  };
+  RI_sample : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::blsclient::PI_motion_command.others {
+    Taste::coordinates => "170074 96377";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "sample";
+    Taste::labelInheritance => "false";
+  };
+  RI_sample1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::motion_command2d_logger::PI_sample.others {
+    Taste::coordinates => "159523 100870";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "sample1";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+  Source_Text => ("/home/taste/esrocos_workspace/install/share/taste_components/dispatchers/motioncommanddispatcher.zip");
+END MotionCommandDispatcher;
+
+SYSTEM IMPLEMENTATION MotionCommandDispatcher.others
+END MotionCommandDispatcher.others;
+
+END interfaceview::IV::MotionCommandDispatcher;
+
+PACKAGE interfaceview::IV::blsclient
+PUBLIC
+
+WITH interfaceview::IV::PoseVisualisation::remapper;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_motion_command
+FEATURES
+  mc : IN PARAMETER DataView::Base_commands_Motion2D {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_motion_command;
+
+SUBPROGRAM IMPLEMENTATION PI_motion_command.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 20 ms;
+END PI_motion_command.others;
+
+SUBPROGRAM RI_rigidBodyState
+FEATURES
+  rbs_in : IN PARAMETER DataView::Base_samples_RigidBodyState {
+    Taste::encoding => NATIVE;
+  };
+END RI_rigidBodyState;
+
+SUBPROGRAM IMPLEMENTATION RI_rigidBodyState.others
+END RI_rigidBodyState.others;
+
+SYSTEM blsclient
+FEATURES
+  PI_motion_command : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::blsclient::PI_motion_command.others {
+    Taste::coordinates => "183932 90550";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 10 ms;
+    Taste::InterfaceName => "motion_command";
+  };
+  RI_rigidBodyState : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::PoseVisualisation::remapper::PI_rbs_in.others {
+    Taste::coordinates => "205664 96850";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "rigidBodyState";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (CPP);
+  Taste::Active_Interfaces => any;
+  Source_Text => ("/home/taste/esrocos_workspace/install/share/taste_components/plex-blsclient/blsclient.zip");
+END blsclient;
+
+SYSTEM IMPLEMENTATION blsclient.others
+SUBCOMPONENTS
+  compilerOption : DATA DataView::Taste_directive {
+    Taste::FS_Default_Value => "compiler-option:""-DOROCOS_TARGET=gnulinux""";
+  };
+END blsclient.others;
+
+END interfaceview::IV::blsclient;
+
+PACKAGE interfaceview::IV::PoseVisualisation::vizkit3drobotpose
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_updateRigidBodyState
+FEATURES
+  rbstate : IN PARAMETER DataView::Base_samples_RigidBodyState {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_updateRigidBodyState;
+
+SUBPROGRAM IMPLEMENTATION PI_updateRigidBodyState.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_updateRigidBodyState.others;
+
+SYSTEM vizkit3drobotpose
+FEATURES
+  PI_updateRigidBodyState : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::PoseVisualisation::vizkit3drobotpose::PI_updateRigidBodyState.others {
+    Taste::coordinates => "239198 93907";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "updateRigidBodyState";
+  };
+PROPERTIES
+  Source_Language => (CPP);
+  Taste::Active_Interfaces => any;
+  Source_Text => ("/home/taste/esrocos_workspace/install/share/taste_components/plex-pose_visualisation/vizkit3drobotpose.zip");
+END vizkit3drobotpose;
+
+SYSTEM IMPLEMENTATION vizkit3drobotpose.others
+SUBCOMPONENTS
+  configFile : DATA DataView::Vizkit3D_FilePath {
+    Taste::FS_Default_Value => """config-bodystate.yml""";
+  };
+  id : DATA DataView::Vizkit3D_PluginLabel {
+    Taste::FS_Default_Value => """robotPose""";
+  };
+  compilerOption : DATA DataView::Taste_directive {
+    Taste::FS_Default_Value => "compiler-option:""-DOROCOS_TARGET=gnulinux""";
+  };
+END vizkit3drobotpose.others;
+
+END interfaceview::IV::PoseVisualisation::vizkit3drobotpose;
+
+PACKAGE interfaceview::IV::PoseVisualisation::vizkit3dmarkerpose
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_updateRigidBodyState
+FEATURES
+  rbstate : IN PARAMETER DataView::Base_samples_RigidBodyState {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_updateRigidBodyState;
+
+SUBPROGRAM IMPLEMENTATION PI_updateRigidBodyState.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_updateRigidBodyState.others;
+
+SYSTEM vizkit3dmarkerpose
+FEATURES
+  PI_updateRigidBodyState : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::PoseVisualisation::vizkit3dmarkerpose::PI_updateRigidBodyState.others {
+    Taste::coordinates => "239429 99542";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "updateRigidBodyState";
+  };
+PROPERTIES
+  Source_Language => (CPP);
+  Taste::Active_Interfaces => enabled;
+  Source_Text => ("/home/taste/esrocos_workspace/install/share/taste_components/plex-pose_visualisation/vizkit3dmarkerpose.zip");
+END vizkit3dmarkerpose;
+
+SYSTEM IMPLEMENTATION vizkit3dmarkerpose.others
+SUBCOMPONENTS
+  configFile : DATA DataView::Vizkit3D_FilePath {
+    Taste::FS_Default_Value => """config-bodystate.yml""";
+  };
+  id : DATA DataView::Vizkit3D_PluginLabel {
+    Taste::FS_Default_Value => """markerPose""";
+  };
+  compilerOption : DATA DataView::Taste_directive {
+    Taste::FS_Default_Value => "compiler-option:""-DOROCOS_TARGET=gnulinux""";
+  };
+END vizkit3dmarkerpose.others;
+
+END interfaceview::IV::PoseVisualisation::vizkit3dmarkerpose;
+
+PACKAGE interfaceview::IV::PoseVisualisation::remapper
+PUBLIC
+
+WITH interfaceview::IV::PoseVisualisation::vizkit3drobotpose;
+WITH interfaceview::IV::PoseVisualisation::vizkit3dmarkerpose;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_rbs_in
+FEATURES
+  rbs : IN PARAMETER DataView::Base_samples_RigidBodyState {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_rbs_in;
+
+SUBPROGRAM IMPLEMENTATION PI_rbs_in.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_rbs_in.others;
+
+SUBPROGRAM PI_mbs_in
+FEATURES
+  mbs : IN PARAMETER DataView::Base_samples_RigidBodyState {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_mbs_in;
+
+SUBPROGRAM IMPLEMENTATION PI_mbs_in.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_mbs_in.others;
+
+SUBPROGRAM RI_rbs_out
+FEATURES
+  rbstate : IN PARAMETER DataView::Base_samples_RigidBodyState {
+    Taste::encoding => NATIVE;
+  };
+END RI_rbs_out;
+
+SUBPROGRAM IMPLEMENTATION RI_rbs_out.others
+END RI_rbs_out.others;
+
+SUBPROGRAM RI_mbs_out
+FEATURES
+  rbstate : IN PARAMETER DataView::Base_samples_RigidBodyState {
+    Taste::encoding => NATIVE;
+  };
+END RI_mbs_out;
+
+SUBPROGRAM IMPLEMENTATION RI_mbs_out.others
+END RI_mbs_out.others;
+
+SYSTEM remapper
+FEATURES
+  PI_rbs_in : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::PoseVisualisation::remapper::PI_rbs_in.others {
+    Taste::coordinates => "227515 91971";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "rbs_in";
+  };
+  PI_mbs_in : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::PoseVisualisation::remapper::PI_mbs_in.others {
+    Taste::coordinates => "227515 98271";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "mbs_in";
+  };
+  RI_rbs_out : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::PoseVisualisation::vizkit3drobotpose::PI_updateRigidBodyState.others {
+    Taste::coordinates => "234135 91971";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "rbs_out";
+    Taste::labelInheritance => "true";
+  };
+  RI_mbs_out : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::PoseVisualisation::vizkit3dmarkerpose::PI_updateRigidBodyState.others {
+    Taste::coordinates => "234135 96696";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "mbs_out";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (CPP);
+  Taste::Active_Interfaces => any;
+  Source_Text => ("/home/taste/esrocos_workspace/install/share/taste_components/plex-pose_visualisation/remapper.zip");
+END remapper;
+
+SYSTEM IMPLEMENTATION remapper.others
+END remapper.others;
+
+END interfaceview::IV::PoseVisualisation::remapper;
+
+PACKAGE interfaceview::IV::PoseVisualisation
+PUBLIC
+
+WITH interfaceview::IV::PoseVisualisation::vizkit3drobotpose;
+WITH interfaceview::IV::PoseVisualisation::vizkit3dmarkerpose;
+WITH interfaceview::IV::PoseVisualisation::remapper;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_mbs_in
+FEATURES
+  mbs : IN PARAMETER DataView::Base_samples_RigidBodyState {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_mbs_in;
+
+SUBPROGRAM IMPLEMENTATION PI_mbs_in.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_mbs_in.others;
+
+SUBPROGRAM PI_rbs_in
+FEATURES
+  rbs : IN PARAMETER DataView::Base_samples_RigidBodyState {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_rbs_in;
+
+SUBPROGRAM IMPLEMENTATION PI_rbs_in.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_rbs_in.others;
+
+SYSTEM PoseVisualisation
+FEATURES
+  PI_mbs_in : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::PoseVisualisation::remapper::PI_mbs_in.others {
+    Taste::coordinates => "221569 97321";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "mbs_in";
+  };
+  PI_rbs_in : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::PoseVisualisation::remapper::PI_rbs_in.others {
+    Taste::coordinates => "221569 92596";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "rbs_in";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+END PoseVisualisation;
+
+SYSTEM IMPLEMENTATION PoseVisualisation.others
+SUBCOMPONENTS
+-- [ interfaceview::IV::PoseVisualisation::PoseVisualisation.others.vizkit3drobotpose - text 
+--vizkit3d plugin RigidBodyStateVisualization. 
+--]
+  vizkit3drobotpose : SYSTEM interfaceview::IV::PoseVisualisation::vizkit3drobotpose::vizkit3drobotpose.others {
+    Taste::coordinates => "239198 90757 245192 95389";
+  };
+-- [ interfaceview::IV::PoseVisualisation::PoseVisualisation.others.vizkit3dmarkerpose - text 
+--vizkit3d plugin RigidBodyStateVisualization. 
+--]
+  vizkit3dmarkerpose : SYSTEM interfaceview::IV::PoseVisualisation::vizkit3dmarkerpose::vizkit3dmarkerpose.others {
+    Taste::coordinates => "239429 96392 245423 101024";
+  };
+  remapper : SYSTEM interfaceview::IV::PoseVisualisation::remapper::remapper.others {
+    Taste::coordinates => "227515 91971 234135 100401";
+  };
+CONNECTIONS
+  vizkit3drobotpose_PI_updateRigidBodyState_remapper_RI_rbs_out : SUBPROGRAM ACCESS vizkit3drobotpose.PI_updateRigidBodyState -> remapper.RI_rbs_out {
+    Taste::coordinates => "234135 91971 236666 91971 236666 93907 239198 93907";
+  };
+  vizkit3dmarkerpose_PI_updateRigidBodyState_remapper_RI_mbs_out : SUBPROGRAM ACCESS vizkit3dmarkerpose.PI_updateRigidBodyState -> remapper.RI_mbs_out {
+    Taste::coordinates => "234135 96696 236782 96696 236782 99542 239429 99542";
+  };
+  remapper_PI_rbs_in_PoseVisualisation_PI_rbs_in : SUBPROGRAM ACCESS remapper.PI_rbs_in -> PI_rbs_in {
+    Taste::coordinates => "221569 92596 227061 92596 227061 91971 227515 91971";
+  };
+  remapper_PI_mbs_in_PoseVisualisation_PI_mbs_in : SUBPROGRAM ACCESS remapper.PI_mbs_in -> PI_mbs_in {
+    Taste::coordinates => "221569 97321 227061 97321 227061 98271 227515 98271";
+  };
+END PoseVisualisation.others;
+
+END interfaceview::IV::PoseVisualisation;
+
+PACKAGE interfaceview::IV::dummyproducer
+PUBLIC
+
+WITH interfaceview::IV::PoseVisualisation::remapper;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_clock
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_clock;
+
+SUBPROGRAM IMPLEMENTATION PI_clock.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 1000 ms;
+END PI_clock.others;
+
+SUBPROGRAM RI_updatemarkerpose
+FEATURES
+  mbs : IN PARAMETER DataView::Base_samples_RigidBodyState {
+    Taste::encoding => NATIVE;
+  };
+END RI_updatemarkerpose;
+
+SUBPROGRAM IMPLEMENTATION RI_updatemarkerpose.others
+END RI_updatemarkerpose.others;
+
+SYSTEM dummyproducer
+FEATURES
+  PI_clock : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::dummyproducer::PI_clock.others {
+    Taste::coordinates => "185507 109603";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 1000 ms;
+    Taste::InterfaceName => "clock";
+  };
+  RI_updatemarkerpose : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::PoseVisualisation::remapper::PI_mbs_in.others {
+    Taste::coordinates => "210861 117478";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "updatemarkerpose";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (CPP);
+  Taste::Active_Interfaces => any;
+END dummyproducer;
+
+SYSTEM IMPLEMENTATION dummyproducer.others
+END dummyproducer.others;
+
+END interfaceview::IV::dummyproducer;
+
 PACKAGE interfaceview::IV
 PUBLIC
 
+WITH interfaceview::IV::controldevice;
+WITH interfaceview::IV::JoystickCommandDispatcher;
+WITH interfaceview::IV::joystick_2_joint_commands;
+WITH interfaceview::IV::joystick_2_motion_command;
+WITH interfaceview::IV::gr740_candriver;
+WITH interfaceview::IV::dump_joint_commands;
+WITH interfaceview::IV::motion_command2d_logger;
+WITH interfaceview::IV::MotionCommandDispatcher;
+WITH interfaceview::IV::blsclient;
+WITH interfaceview::IV::PoseVisualisation;
+WITH interfaceview::IV::dummyproducer;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -18,6 +917,71 @@ PROPERTIES
 END interfaceview;
 
 SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  controldevice : SYSTEM interfaceview::IV::controldevice::controldevice.others {
+    Taste::coordinates => "82517 58109 103337 76533";
+  };
+  JoystickCommandDispatcher : SYSTEM interfaceview::IV::JoystickCommandDispatcher::JoystickCommandDispatcher.others {
+    Taste::coordinates => "115902 58896 137477 77163";
+  };
+  joystick_2_joint_commands : SYSTEM interfaceview::IV::joystick_2_joint_commands::joystick_2_joint_commands.others {
+    Taste::coordinates => "150390 59526 172751 78266";
+  };
+  joystick_2_motion_command : SYSTEM interfaceview::IV::joystick_2_motion_command::joystick_2_motion_command.others {
+    Taste::coordinates => "116690 85037 137792 102807";
+  };
+  gr740_candriver : SYSTEM interfaceview::IV::gr740_candriver::gr740_candriver.others {
+    Taste::coordinates => "187397 60313 208183 76683";
+  };
+  dump_joint_commands : SYSTEM interfaceview::IV::dump_joint_commands::dump_joint_commands.others {
+    Taste::coordinates => "221569 60313 245505 75566";
+  };
+  motion_command2d_logger : SYSTEM interfaceview::IV::motion_command2d_logger::motion_command2d_logger.others {
+    Taste::coordinates => "150390 111808 168657 121587";
+  };
+  MotionCommandDispatcher : SYSTEM interfaceview::IV::MotionCommandDispatcher::MotionCommandDispatcher.others {
+    Taste::coordinates => "149602 86297 170074 100870";
+  };
+  blsclient : SYSTEM interfaceview::IV::blsclient::blsclient.others {
+    Taste::coordinates => "183932 87400 205664 101258";
+  };
+  PoseVisualisation : SYSTEM interfaceview::IV::PoseVisualisation::PoseVisualisation.others {
+    Taste::coordinates => "221569 89446 263300 103304";
+  };
+  dummyproducer : SYSTEM interfaceview::IV::dummyproducer::dummyproducer.others {
+    Taste::coordinates => "183932 109603 210861 122674";
+  };
+CONNECTIONS
+  JoystickCommandDispatcher_PI_dispatch_controldevice_RI_commands : SUBPROGRAM ACCESS JoystickCommandDispatcher.PI_dispatch -> controldevice.RI_commands {
+    Taste::coordinates => "103337 70709 109619 70709 109619 63305 115902 63305";
+  };
+  joystick_2_joint_commands_PI_commands_JoystickCommandDispatcher_RI_sample : SUBPROGRAM ACCESS joystick_2_joint_commands.PI_commands -> JoystickCommandDispatcher.RI_sample {
+    Taste::coordinates => "137477 62676 143933 62676 143933 61101 150390 61101";
+  };
+  joystick_2_motion_command_PI_commands_JoystickCommandDispatcher_RI_sample1 : SUBPROGRAM ACCESS joystick_2_motion_command.PI_commands -> JoystickCommandDispatcher.RI_sample1 {
+    Taste::coordinates => "126139 77163 126139 81100 126768 81100 126768 85037";
+  };
+  gr740_candriver_PI_commands_joystick_2_joint_commands_RI_joint_commands : SUBPROGRAM ACCESS gr740_candriver.PI_commands -> joystick_2_joint_commands.RI_joint_commands {
+    Taste::coordinates => "172751 74172 180074 74172 180074 63463 187397 63463";
+  };
+  MotionCommandDispatcher_PI_dispatch_motion_command_joystick_2_motion_command_RI_motion_commands : SUBPROGRAM ACCESS MotionCommandDispatcher.PI_dispatch_motion_command -> joystick_2_motion_command.RI_motion_commands {
+    Taste::coordinates => "137792 99526 143697 99526 143697 88818 149602 88818";
+  };
+  dump_joint_commands_PI_commands_gr740_candriver_RI_samples : SUBPROGRAM ACCESS dump_joint_commands.PI_commands -> gr740_candriver.RI_samples {
+    Taste::coordinates => "208183 73700 214876 73700 214876 63463 221569 63463";
+  };
+  motion_command2d_logger_PI_sample_MotionCommandDispatcher_RI_sample1 : SUBPROGRAM ACCESS motion_command2d_logger.PI_sample -> MotionCommandDispatcher.RI_sample1 {
+    Taste::coordinates => "159523 100870 159523 106339 159366 106339 159366 111808";
+  };
+  blsclient_PI_motion_command_MotionCommandDispatcher_RI_sample : SUBPROGRAM ACCESS blsclient.PI_motion_command -> MotionCommandDispatcher.RI_sample {
+    Taste::coordinates => "170074 96377 177318 96377 177318 90550 183932 90550";
+  };
+  PoseVisualisation_PI_rbs_in_blsclient_RI_rigidBodyState : SUBPROGRAM ACCESS PoseVisualisation.PI_rbs_in -> blsclient.RI_rigidBodyState {
+    Taste::coordinates => "205664 96850 213616 96850 213616 92596 221569 92596";
+  };
+  PoseVisualisation_PI_mbs_in_dummyproducer_RI_updatemarkerpose : SUBPROGRAM ACCESS PoseVisualisation.PI_mbs_in -> dummyproducer.RI_updatemarkerpose {
+    Taste::coordinates => "210861 117478 216215 117478 216215 97321 221569 97321";
+  };
 END interfaceview.others;
 
 PROPERTIES
