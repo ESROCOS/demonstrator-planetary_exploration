@@ -26,7 +26,7 @@ FEATURES
     Taste::coordinates => "105667 98686";
   };
 PROPERTIES
-  Taste::Interface_Coordinates => "115786 124812" APPLIES TO link;
+  Taste::Interface_Coordinates => "115786 122765" APPLIES TO link;
   Deployment::Help => "Write your ASN.1 configuration here";
   Deployment::Configuration => "{devname ""enp0s3"", address ""192.168.0.56"", port 5116}";
   Deployment::Config => "/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/ip.asn";
@@ -60,7 +60,7 @@ FEATURES
     Taste::coordinates => "160310 98108";
   };
 PROPERTIES
-  Taste::Interface_Coordinates => "160358 111741" APPLIES TO link;
+  Taste::Interface_Coordinates => "160358 109694" APPLIES TO link;
   Deployment::Help => "Write your ASN.1 configuration here";
   Deployment::Configuration => "{devname ""enp0s3"", address ""192.168.0.9"", port 5116}";
   Deployment::Config => "/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/ip.asn";
@@ -94,7 +94,7 @@ FEATURES
     Taste::coordinates => "227553 98265";
   };
 PROPERTIES
-  Taste::Interface_Coordinates => "212386 123867" APPLIES TO link;
+  Taste::Interface_Coordinates => "212386 121820" APPLIES TO link;
   Deployment::Help => "Write your ASN.1 configuration here";
   Deployment::Configuration => "{devname ""greth1"", address ""192.168.0.42"", gateway ""192.168.0.1"", netmask ""255.255.255.0"", version ipv4, port 5118 }";
   Deployment::Config => "/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/ip.asn";
@@ -112,14 +112,14 @@ PUBLIC
 
 WITH interfaceview::IV::controldevice;
 WITH interfaceview::IV::JoystickCommandDispatcher;
-WITH interfaceview::IV::joystick_2_joint_commands;
-WITH interfaceview::IV::joystick_2_motion_command;
 WITH interfaceview::IV::MotionCommandDispatcher;
 WITH interfaceview::IV::vizkit3drobotpose;
 WITH interfaceview::IV::motion_command2d_logger;
 WITH interfaceview::IV::signal_handler;
 WITH interfaceview::IV::trigger;
 WITH interfaceview::IV::vizkit3dmarkerpose;
+WITH interfaceview::IV::joystick_2_joint_commands;
+WITH interfaceview::IV::joystick_2_motion_command;
 WITH ocarina_processors_x86;
 WITH deploymentview::DV::remote_control_pc;
 WITH interfaceview::IV::Watchdog;
@@ -151,12 +151,6 @@ SUBCOMPONENTS
   IV_JoystickCommandDispatcher : SYSTEM interfaceview::IV::JoystickCommandDispatcher::JoystickCommandDispatcher.others {
     Taste::FunctionName => "JoystickCommandDispatcher";
   };
-  IV_joystick_2_joint_commands : SYSTEM interfaceview::IV::joystick_2_joint_commands::joystick_2_joint_commands.others {
-    Taste::FunctionName => "joystick_2_joint_commands";
-  };
-  IV_joystick_2_motion_command : SYSTEM interfaceview::IV::joystick_2_motion_command::joystick_2_motion_command.others {
-    Taste::FunctionName => "joystick_2_motion_command";
-  };
   IV_MotionCommandDispatcher : SYSTEM interfaceview::IV::MotionCommandDispatcher::MotionCommandDispatcher.others {
     Taste::FunctionName => "MotionCommandDispatcher";
   };
@@ -175,6 +169,12 @@ SUBCOMPONENTS
   IV_vizkit3dmarkerpose : SYSTEM interfaceview::IV::vizkit3dmarkerpose::vizkit3dmarkerpose.others {
     Taste::FunctionName => "vizkit3dmarkerpose";
   };
+  IV_joystick_2_joint_commands : SYSTEM interfaceview::IV::joystick_2_joint_commands::joystick_2_joint_commands.others {
+    Taste::FunctionName => "joystick_2_joint_commands";
+  };
+  IV_joystick_2_motion_command : SYSTEM interfaceview::IV::joystick_2_motion_command::joystick_2_motion_command.others {
+    Taste::FunctionName => "joystick_2_motion_command";
+  };
   remote_control : PROCESS deploymentview::DV::remote_control_pc::remote_control.others {
     Taste::coordinates => "91210 53709 122305 86179";
     Deployment::Port_Number => 0;
@@ -190,14 +190,14 @@ CONNECTIONS
 PROPERTIES
   Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_controldevice;
   Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_JoystickCommandDispatcher;
-  Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_joystick_2_joint_commands;
-  Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_joystick_2_motion_command;
   Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_MotionCommandDispatcher;
   Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_vizkit3drobotpose;
   Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_motion_command2d_logger;
   Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_signal_handler;
   Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_trigger;
   Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_vizkit3dmarkerpose;
+  Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_joystick_2_joint_commands;
+  Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_joystick_2_motion_command;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO remote_control;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO generic_sockets_ip_pohic;
 END remote_control_pc.others;
@@ -297,18 +297,18 @@ SUBCOMPONENTS
     Taste::coordinates => "197633 41731 252119 102202";
   };
   ip_i : BUS ocarina_buses::ip.i {
-    Taste::coordinates => "115786 111741 212386 156939";
+    Taste::coordinates => "115786 109694 212386 154892";
   };
   interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
 CONNECTIONS
   Connection2 : BUS ACCESS ip_i -> remote_control_pc.generic_sockets_ip_pohic_ip_i {
-    Taste::coordinates => "105667 98686 105667 124812 115786 124812";
+    Taste::coordinates => "105667 98686 105667 122765 115786 122765";
   };
   Connection3 : BUS ACCESS ip_i -> cots_linux_obc.generic_sockets_ip_pohic_ip_i {
-    Taste::coordinates => "160310 98108 160310 108170 160358 108170 160358 111741";
+    Taste::coordinates => "160310 98108 160310 108170 160358 108170 160358 109694";
   };
   Connection1 : BUS ACCESS ip_i -> GR740.leon_ethernet_greth_ip_i {
-    Taste::coordinates => "227553 98265 227553 123867 212386 123867";
+    Taste::coordinates => "227553 98265 227553 121820 212386 121820";
   };
 PROPERTIES
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.Watchdog_PI_test_cmd_MotionCommandDispatcher_RI_sample;

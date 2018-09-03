@@ -37,6 +37,9 @@ esrocos_add_dependency(PARTITION remote_control
 esrocos_add_dependency(PARTITION on_board_control
                        MODULES   eigen3 base_support)
 
+esrocos_add_dependency(PARTITION gr740_partition
+                       MODULES   eigen3)
+
 ########### FOR COMPONENT PROJECTS ################
 
 #uncomment if you want to export a function

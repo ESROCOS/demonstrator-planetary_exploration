@@ -11,4 +11,7 @@ deps:
 - gr740/candriver: ''
 - tools/data_logger_components: ''
 - plex/pose_visualisation: ''
+- gr740/stream_aligner: ''
+- plex/transformer: ''
+#- perception/aruco_marker_detection: ''
 #- types/vizkit3d: ''
