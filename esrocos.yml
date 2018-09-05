@@ -13,5 +13,5 @@ deps:
 - plex/pose_visualisation: ''
 - gr740/stream_aligner: ''
 - plex/transformer: ''
-#- perception/aruco_marker_detection: ''
+- perception/aruco_marker_detection: ''
 #- types/vizkit3d: ''
