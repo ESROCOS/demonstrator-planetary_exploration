@@ -434,7 +434,7 @@ WITH TASTE_IV_Properties;
 SUBPROGRAM PI_updateRigidBodyState
 FEATURES
   sample : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => UPER;
+    Taste::encoding => NATIVE;
   };
 PROPERTIES
   Taste::Associated_Queue_Size => 1;
@@ -475,7 +475,7 @@ WITH TASTE_IV_Properties;
 SUBPROGRAM PI_A
 FEATURES
   smpl : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => UPER;
+    Taste::encoding => NATIVE;
   };
 PROPERTIES
   Taste::Associated_Queue_Size => 1;
@@ -489,7 +489,7 @@ END PI_A.others;
 SUBPROGRAM PI_B
 FEATURES
   smpl : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => UPER;
+    Taste::encoding => NATIVE;
   };
 PROPERTIES
   Taste::Associated_Queue_Size => 1;
@@ -557,10 +557,10 @@ END gr740_stream_aligner;
 SYSTEM IMPLEMENTATION gr740_stream_aligner.others
 SUBCOMPONENTS
   periodA : DATA DataView::T_Double {
-    Taste::FS_Default_Value => "1.0";
+    Taste::FS_Default_Value => "0.1";
   };
   periodB : DATA DataView::T_Double {
-    Taste::FS_Default_Value => "3.0";
+    Taste::FS_Default_Value => "0.1";
   };
   includeOrocos : DATA DataView::Taste_directive {
     Taste::FS_Default_Value => "compiler-option:""-I/home/taste/esrocos_workspace/install/include/orocos/""";
@@ -613,7 +613,7 @@ END PI_relativeMarkerPose.others;
 SUBPROGRAM RI_absoluteMarkerPose
 FEATURES
   sample : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => UPER;
+    Taste::encoding => NATIVE;
   };
 END RI_absoluteMarkerPose;
 
@@ -797,80 +797,6 @@ END joystick_2_motion_command.others;
 
 END interfaceview::IV::joystick_2_motion_command;
 
-PACKAGE interfaceview::IV::RigidBodyStateDispatcher
-PUBLIC
-
-WITH interfaceview::IV::gr740_stream_aligner;
-WITH interfaceview::IV::vizkit3drobotpose;
-WITH Taste;
-WITH DataView;
-WITH TASTE_IV_Properties;
-SUBPROGRAM PI_dispatch
-FEATURES
-  sample : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => NATIVE;
-  };
-PROPERTIES
-  Taste::Associated_Queue_Size => 1;
-END PI_dispatch;
-
-SUBPROGRAM IMPLEMENTATION PI_dispatch.others
-PROPERTIES
-  Compute_Execution_Time => 0 ms .. 0 ms;
-END PI_dispatch.others;
-
-SUBPROGRAM RI_sample
-FEATURES
-  smpl : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => UPER;
-  };
-END RI_sample;
-
-SUBPROGRAM IMPLEMENTATION RI_sample.others
-END RI_sample.others;
-
-SUBPROGRAM RI_sample1
-FEATURES
-  rbstate : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => NATIVE;
-  };
-END RI_sample1;
-
-SUBPROGRAM IMPLEMENTATION RI_sample1.others
-END RI_sample1.others;
-
-SYSTEM RigidBodyStateDispatcher
-FEATURES
-  PI_dispatch : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::RigidBodyStateDispatcher::PI_dispatch.others {
-    Taste::coordinates => "216530 89762";
-    Taste::RCMoperationKind => sporadic;
-    Taste::RCMperiod => 0 ms;
-    Taste::Deadline => 0 ms;
-    Taste::InterfaceName => "dispatch";
-  };
-  RI_sample : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::gr740_stream_aligner::PI_A.others {
-    Taste::coordinates => "225379 100470";
-    Taste::RCMoperationKind => any;
-    Taste::InterfaceName => "sample";
-    Taste::labelInheritance => "false";
-  };
-  RI_sample1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::vizkit3drobotpose::PI_updateRigidBodyState.others {
-    Taste::coordinates => "236402 89919";
-    Taste::RCMoperationKind => any;
-    Taste::InterfaceName => "sample1";
-    Taste::labelInheritance => "false";
-  };
-PROPERTIES
-  Source_Language => (C);
-  Taste::Active_Interfaces => any;
-  Source_Text => ("/home/taste/esrocos_workspace/install/share/taste_components/dispatchers/rigidbodystatedispatcher.zip");
-END RigidBodyStateDispatcher;
-
-SYSTEM IMPLEMENTATION RigidBodyStateDispatcher.others
-END RigidBodyStateDispatcher.others;
-
-END interfaceview::IV::RigidBodyStateDispatcher;
-
 PACKAGE interfaceview::IV::JoystickCommandDispatcher
 PUBLIC
 
@@ -982,7 +908,7 @@ END PI_pan_tilt.others;
 
 SUBPROGRAM RI_rigidBodyState
 FEATURES
-  sample : IN PARAMETER DataView::Base_samples_RigidBodyState {
+  smpl : IN PARAMETER DataView::Base_samples_RigidBodyState {
     Taste::encoding => NATIVE;
   };
 END RI_rigidBodyState;
@@ -1046,8 +972,8 @@ END PI_trigger.others;
 
 SUBPROGRAM RI_pose
 FEATURES
-  sample : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => UPER;
+  smpl : IN PARAMETER DataView::Base_samples_RigidBodyState {
+    Taste::encoding => NATIVE;
   };
 END RI_pose;
 
@@ -1093,6 +1019,80 @@ END aruco_marker_detector.others;
 
 END interfaceview::IV::aruco_marker_detector;
 
+PACKAGE interfaceview::IV::RigidBodyStateDispatcher
+PUBLIC
+
+WITH interfaceview::IV::vizkit3drobotpose;
+WITH interfaceview::IV::gr740_stream_aligner;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_dispatch
+FEATURES
+  smpl : IN PARAMETER DataView::Base_samples_RigidBodyState {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_dispatch;
+
+SUBPROGRAM IMPLEMENTATION PI_dispatch.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_dispatch.others;
+
+SUBPROGRAM RI_sample
+FEATURES
+  rbstate : IN PARAMETER DataView::Base_samples_RigidBodyState {
+    Taste::encoding => NATIVE;
+  };
+END RI_sample;
+
+SUBPROGRAM IMPLEMENTATION RI_sample.others
+END RI_sample.others;
+
+SUBPROGRAM RI_sample1
+FEATURES
+  smpl : IN PARAMETER DataView::Base_samples_RigidBodyState {
+    Taste::encoding => NATIVE;
+  };
+END RI_sample1;
+
+SUBPROGRAM IMPLEMENTATION RI_sample1.others
+END RI_sample1.others;
+
+SYSTEM RigidBodyStateDispatcher
+FEATURES
+  PI_dispatch : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::RigidBodyStateDispatcher::PI_dispatch.others {
+    Taste::coordinates => "212750 92754";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "dispatch";
+  };
+  RI_sample : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::vizkit3drobotpose::PI_updateRigidBodyState.others {
+    Taste::coordinates => "232881 92125";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "sample";
+    Taste::labelInheritance => "false";
+  };
+  RI_sample1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::gr740_stream_aligner::PI_A.others {
+    Taste::coordinates => "221858 102359";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "sample1";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => any;
+  Source_Text => ("/home/taste/esrocos_workspace/install/share/taste_components/dispatchers/rigidbodystatedispatcher.zip");
+END RigidBodyStateDispatcher;
+
+SYSTEM IMPLEMENTATION RigidBodyStateDispatcher.others
+END RigidBodyStateDispatcher.others;
+
+END interfaceview::IV::RigidBodyStateDispatcher;
+
 PACKAGE interfaceview::IV
 PUBLIC
 
@@ -1108,10 +1108,10 @@ WITH interfaceview::IV::gr740_stream_aligner;
 WITH interfaceview::IV::Transformer;
 WITH interfaceview::IV::joystick_2_joint_commands;
 WITH interfaceview::IV::joystick_2_motion_command;
-WITH interfaceview::IV::RigidBodyStateDispatcher;
 WITH interfaceview::IV::JoystickCommandDispatcher;
 WITH interfaceview::IV::blsclient;
 WITH interfaceview::IV::aruco_marker_detector;
+WITH interfaceview::IV::RigidBodyStateDispatcher;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -1164,9 +1164,6 @@ SUBCOMPONENTS
   joystick_2_motion_command : SYSTEM interfaceview::IV::joystick_2_motion_command::joystick_2_motion_command.others {
     Taste::coordinates => "88029 88187 116758 102832";
   };
-  RigidBodyStateDispatcher : SYSTEM interfaceview::IV::RigidBodyStateDispatcher::RigidBodyStateDispatcher.others {
-    Taste::coordinates => "216530 87557 236402 100470";
-  };
   JoystickCommandDispatcher : SYSTEM interfaceview::IV::JoystickCommandDispatcher::JoystickCommandDispatcher.others {
     Taste::coordinates => "114642 62046 142123 80943";
   };
@@ -1175,6 +1172,9 @@ SUBCOMPONENTS
   };
   aruco_marker_detector : SYSTEM interfaceview::IV::aruco_marker_detector::aruco_marker_detector.others {
     Taste::coordinates => "158264 109446 186294 122201";
+  };
+  RigidBodyStateDispatcher : SYSTEM interfaceview::IV::RigidBodyStateDispatcher::RigidBodyStateDispatcher.others {
+    Taste::coordinates => "212750 88029 232881 102359";
   };
 CONNECTIONS
   JoystickCommandDispatcher_PI_dispatch_controldevice_RI_commands : SUBPROGRAM ACCESS JoystickCommandDispatcher.PI_dispatch -> controldevice.RI_commands {
@@ -1195,8 +1195,8 @@ CONNECTIONS
   motion_command2d_logger_PI_sample_MotionCommandDispatcher_RI_sample1 : SUBPROGRAM ACCESS motion_command2d_logger.PI_sample -> MotionCommandDispatcher.RI_sample1 {
     Taste::coordinates => "132724 102254 132724 104992 132722 104992 132722 107004";
   };
-  vizkit3drobotpose_PI_updateRigidBodyState_RigidBodyStateDispatcher_RI_sample1 : SUBPROGRAM ACCESS vizkit3drobotpose.PI_updateRigidBodyState -> RigidBodyStateDispatcher.RI_sample1 {
-    Taste::coordinates => "236402 89919 255905 89919 255905 88015";
+  vizkit3drobotpose_PI_updateRigidBodyState_RigidBodyStateDispatcher_RI_sample : SUBPROGRAM ACCESS vizkit3drobotpose.PI_updateRigidBodyState -> RigidBodyStateDispatcher.RI_sample {
+    Taste::coordinates => "232881 92125 255905 92125 255905 88015";
   };
   motion_command2d_logger_PI_shutdown_signal_handler_RI_shutdown : SUBPROGRAM ACCESS motion_command2d_logger.PI_shutdown -> signal_handler.RI_shutdown {
     Taste::coordinates => "107958 116743 113470 116743 113470 116742 116579 116742";
@@ -1204,8 +1204,8 @@ CONNECTIONS
   vizkit3dmarkerpose_PI_updateRigidBodyState_Transformer_RI_absoluteMarkerPose : SUBPROGRAM ACCESS vizkit3dmarkerpose.PI_updateRigidBodyState -> Transformer.RI_absoluteMarkerPose {
     Taste::coordinates => "261410 120784 268065 120784 268065 105256";
   };
-  gr740_stream_aligner_PI_A_RigidBodyStateDispatcher_RI_sample : SUBPROGRAM ACCESS gr740_stream_aligner.PI_A -> RigidBodyStateDispatcher.RI_sample {
-    Taste::coordinates => "225379 100470 225379 104643 205192 104643 205192 108816";
+  gr740_stream_aligner_PI_A_RigidBodyStateDispatcher_RI_sample1 : SUBPROGRAM ACCESS gr740_stream_aligner.PI_A -> RigidBodyStateDispatcher.RI_sample1 {
+    Taste::coordinates => "221858 102359 221858 105587 205192 105587 205192 108816";
   };
   gr740_stream_aligner_PI_B_aruco_marker_detector_RI_pose : SUBPROGRAM ACCESS gr740_stream_aligner.PI_B -> aruco_marker_detector.RI_pose {
     Taste::coordinates => "186294 119367 193144 119367 193144 118266 199995 118266";
@@ -1226,7 +1226,7 @@ CONNECTIONS
     Taste::coordinates => "127320 80943 127320 84565 111493 84565 111493 88187";
   };
   RigidBodyStateDispatcher_PI_dispatch_blsclient_RI_rigidBodyState : SUBPROGRAM ACCESS RigidBodyStateDispatcher.PI_dispatch -> blsclient.RI_rigidBodyState {
-    Taste::coordinates => "203218 95590 209874 95590 209874 89762 216530 89762";
+    Taste::coordinates => "203218 95590 207984 95590 207984 92754 212750 92754";
   };
 END interfaceview.others;
 
