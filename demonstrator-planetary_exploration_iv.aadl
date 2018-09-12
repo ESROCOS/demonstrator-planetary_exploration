@@ -434,7 +434,7 @@ WITH TASTE_IV_Properties;
 SUBPROGRAM PI_updateRigidBodyState
 FEATURES
   sample : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => NATIVE;
+    Taste::encoding => UPER;
   };
 PROPERTIES
   Taste::Associated_Queue_Size => 1;
@@ -475,7 +475,7 @@ WITH TASTE_IV_Properties;
 SUBPROGRAM PI_A
 FEATURES
   smpl : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => NATIVE;
+    Taste::encoding => UPER;
   };
 PROPERTIES
   Taste::Associated_Queue_Size => 1;
@@ -489,7 +489,7 @@ END PI_A.others;
 SUBPROGRAM PI_B
 FEATURES
   smpl : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => NATIVE;
+    Taste::encoding => UPER;
   };
 PROPERTIES
   Taste::Associated_Queue_Size => 1;
@@ -613,7 +613,7 @@ END PI_relativeMarkerPose.others;
 SUBPROGRAM RI_absoluteMarkerPose
 FEATURES
   sample : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => NATIVE;
+    Taste::encoding => UPER;
   };
 END RI_absoluteMarkerPose;
 
@@ -973,7 +973,7 @@ END PI_trigger.others;
 SUBPROGRAM RI_pose
 FEATURES
   smpl : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => NATIVE;
+    Taste::encoding => UPER;
   };
 END RI_pose;
 
@@ -1054,7 +1054,7 @@ END RI_sample.others;
 SUBPROGRAM RI_sample1
 FEATURES
   smpl : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => NATIVE;
+    Taste::encoding => UPER;
   };
 END RI_sample1;
 
