@@ -425,46 +425,6 @@ END oscillate.others;
 
 END interfaceview::IV::oscillate;
 
-PACKAGE interfaceview::IV::vizkit3dmarkerpose
-PUBLIC
-
-WITH Taste;
-WITH DataView;
-WITH TASTE_IV_Properties;
-SUBPROGRAM PI_updateRigidBodyState
-FEATURES
-  sample : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => UPER;
-  };
-PROPERTIES
-  Taste::Associated_Queue_Size => 1;
-END PI_updateRigidBodyState;
-
-SUBPROGRAM IMPLEMENTATION PI_updateRigidBodyState.others
-PROPERTIES
-  Compute_Execution_Time => 0 ms .. 0 ms;
-END PI_updateRigidBodyState.others;
-
-SYSTEM vizkit3dmarkerpose
-FEATURES
-  PI_updateRigidBodyState : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::vizkit3dmarkerpose::PI_updateRigidBodyState.others {
-    Taste::coordinates => "268065 105256";
-    Taste::RCMoperationKind => sporadic;
-    Taste::RCMperiod => 0 ms;
-    Taste::Deadline => 0 ms;
-    Taste::InterfaceName => "updateRigidBodyState";
-  };
-PROPERTIES
-  Source_Language => (CPP);
-  Taste::Active_Interfaces => any;
-  Source_Text => ("/home/taste/esrocos_workspace/install/share/taste_components/plex-pose_visualisation/vizkit3dmarkerpose.zip");
-END vizkit3dmarkerpose;
-
-SYSTEM IMPLEMENTATION vizkit3dmarkerpose.others
-END vizkit3dmarkerpose.others;
-
-END interfaceview::IV::vizkit3dmarkerpose;
-
 PACKAGE interfaceview::IV::gr740_stream_aligner
 PUBLIC
 
@@ -637,7 +597,7 @@ FEATURES
     Taste::InterfaceName => "relativeMarkerPose";
   };
   RI_absoluteMarkerPose : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::vizkit3dmarkerpose::PI_updateRigidBodyState.others {
-    Taste::coordinates => "261410 120784";
+    Taste::coordinates => "261410 115987";
     Taste::RCMoperationKind => any;
     Taste::InterfaceName => "absoluteMarkerPose";
     Taste::labelInheritance => "false";
@@ -1110,6 +1070,56 @@ END blsclient.others;
 
 END interfaceview::IV::blsclient;
 
+PACKAGE interfaceview::IV::vizkit3dmarkerpose
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_updateRigidBodyState
+FEATURES
+  rbstate : IN PARAMETER DataView::Base_samples_RigidBodyState {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_updateRigidBodyState;
+
+SUBPROGRAM IMPLEMENTATION PI_updateRigidBodyState.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_updateRigidBodyState.others;
+
+SYSTEM vizkit3dmarkerpose
+FEATURES
+  PI_updateRigidBodyState : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::vizkit3dmarkerpose::PI_updateRigidBodyState.others {
+    Taste::coordinates => "241730 105016";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "updateRigidBodyState";
+  };
+PROPERTIES
+  Source_Language => (CPP);
+  Taste::Active_Interfaces => enabled;
+  Source_Text => ("/root/esrocos_workspace/install/share/taste_components/plex-pose_visualisation/vizkit3dmarkerpose.zip");
+END vizkit3dmarkerpose;
+
+SYSTEM IMPLEMENTATION vizkit3dmarkerpose.others
+SUBCOMPONENTS
+  configFile : DATA DataView::Vizkit3D_FilePath {
+    Taste::FS_Default_Value => """config-bodystate.yml""";
+  };
+  id : DATA DataView::Vizkit3D_PluginLabel {
+    Taste::FS_Default_Value => """mbs""";
+  };
+  compilerOption : DATA DataView::Taste_directive {
+    Taste::FS_Default_Value => "compiler-option:""-DOROCOS_TARGET=gnulinux""";
+  };
+END vizkit3dmarkerpose.others;
+
+END interfaceview::IV::vizkit3dmarkerpose;
+
 PACKAGE interfaceview::IV
 PUBLIC
 
@@ -1120,7 +1130,6 @@ WITH interfaceview::IV::vizkit3drobotpose;
 WITH interfaceview::IV::motion_command2d_logger;
 WITH interfaceview::IV::signal_handler;
 WITH interfaceview::IV::oscillate;
-WITH interfaceview::IV::vizkit3dmarkerpose;
 WITH interfaceview::IV::gr740_stream_aligner;
 WITH interfaceview::IV::Transformer;
 WITH interfaceview::IV::joystick_2_joint_commands;
@@ -1129,6 +1138,7 @@ WITH interfaceview::IV::JoystickCommandDispatcher;
 WITH interfaceview::IV::aruco_marker_detector;
 WITH interfaceview::IV::RigidBodyStateDispatcher;
 WITH interfaceview::IV::blsclient;
+WITH interfaceview::IV::vizkit3dmarkerpose;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -1166,9 +1176,6 @@ SUBCOMPONENTS
     Taste::coordinates => "195623 58512 218669 76202";
     Taste::Fill_Color => "#FFD700";
   };
-  vizkit3dmarkerpose : SYSTEM interfaceview::IV::vizkit3dmarkerpose::vizkit3dmarkerpose.others {
-    Taste::coordinates => "243883 96704 268876 105256";
-  };
   gr740_stream_aligner : SYSTEM interfaceview::IV::gr740_stream_aligner::gr740_stream_aligner.others {
     Taste::coordinates => "199995 108816 225663 122674";
   };
@@ -1192,6 +1199,12 @@ SUBCOMPONENTS
   };
   blsclient : SYSTEM interfaceview::IV::blsclient::blsclient.others {
     Taste::coordinates => "175586 83462 196760 104722";
+  };
+-- [ interfaceview::IV::interfaceview.others.vizkit3dmarkerpose - text 
+--vizkit3d plugin RigidBodyStateVisualization. 
+--]
+  vizkit3dmarkerpose : SYSTEM interfaceview::IV::vizkit3dmarkerpose::vizkit3dmarkerpose.others {
+    Taste::coordinates => "241730 95628 267592 107933";
   };
 CONNECTIONS
   JoystickCommandDispatcher_PI_dispatch_controldevice_RI_commands : SUBPROGRAM ACCESS JoystickCommandDispatcher.PI_dispatch -> controldevice.RI_commands {
@@ -1218,9 +1231,6 @@ CONNECTIONS
   motion_command2d_logger_PI_shutdown_signal_handler_RI_shutdown : SUBPROGRAM ACCESS motion_command2d_logger.PI_shutdown -> signal_handler.RI_shutdown {
     Taste::coordinates => "107958 116743 113470 116743 113470 116742 116579 116742";
   };
-  vizkit3dmarkerpose_PI_updateRigidBodyState_Transformer_RI_absoluteMarkerPose : SUBPROGRAM ACCESS vizkit3dmarkerpose.PI_updateRigidBodyState -> Transformer.RI_absoluteMarkerPose {
-    Taste::coordinates => "261410 120784 268065 120784 268065 105256";
-  };
   gr740_stream_aligner_PI_A_RigidBodyStateDispatcher_RI_sample1 : SUBPROGRAM ACCESS gr740_stream_aligner.PI_A -> RigidBodyStateDispatcher.RI_sample1 {
     Taste::coordinates => "221858 102359 221858 105587 205192 105587 205192 108816";
   };
@@ -1232,6 +1242,9 @@ CONNECTIONS
   };
   Transformer_PI_relativeMarkerPose_gr740_stream_aligner_RI_aligned_B : SUBPROGRAM ACCESS Transformer.PI_relativeMarkerPose -> gr740_stream_aligner.RI_aligned_B {
     Taste::coordinates => "225663 120471 231883 120471 231883 124565 238104 124565";
+  };
+  vizkit3dmarkerpose_PI_updateRigidBodyState_Transformer_RI_absoluteMarkerPose : SUBPROGRAM ACCESS vizkit3dmarkerpose.PI_updateRigidBodyState -> Transformer.RI_absoluteMarkerPose {
+    Taste::coordinates => "261410 115987 264477 115987 264477 110501 238663 110501 238663 105016 241730 105016";
   };
   joystick_2_joint_commands_PI_commands_JoystickCommandDispatcher_RI_sample : SUBPROGRAM ACCESS joystick_2_joint_commands.PI_commands -> JoystickCommandDispatcher.RI_sample {
     Taste::coordinates => "142123 63621 147831 63621 147831 68030 151019 68030";
