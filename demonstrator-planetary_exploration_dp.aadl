@@ -121,9 +121,9 @@ WITH interfaceview::IV::joystick_2_motion_command;
 WITH interfaceview::IV::JoystickCommandDispatcher;
 WITH ocarina_processors_x86;
 WITH deploymentview::DV::remote_control_pc;
-WITH interfaceview::IV::blsclient;
 WITH interfaceview::IV::aruco_marker_detector;
 WITH interfaceview::IV::RigidBodyStateDispatcher;
+WITH interfaceview::IV::blsclient;
 WITH deploymentview::DV::cots_linux_obc;
 WITH interfaceview::IV::gr740_candriver;
 WITH interfaceview::IV::oscillate;
@@ -203,14 +203,14 @@ END cots_linux_obc;
 
 SYSTEM IMPLEMENTATION cots_linux_obc.others
 SUBCOMPONENTS
-  IV_blsclient : SYSTEM interfaceview::IV::blsclient::blsclient.others {
-    Taste::FunctionName => "blsclient";
-  };
   IV_aruco_marker_detector : SYSTEM interfaceview::IV::aruco_marker_detector::aruco_marker_detector.others {
     Taste::FunctionName => "aruco_marker_detector";
   };
   IV_RigidBodyStateDispatcher : SYSTEM interfaceview::IV::RigidBodyStateDispatcher::RigidBodyStateDispatcher.others {
     Taste::FunctionName => "RigidBodyStateDispatcher";
+  };
+  IV_blsclient : SYSTEM interfaceview::IV::blsclient::blsclient.others {
+    Taste::FunctionName => "blsclient";
   };
   on_board_control : PROCESS deploymentview::DV::cots_linux_obc::on_board_control.others {
     Taste::coordinates => "145766 53806 175800 80968";
@@ -225,9 +225,9 @@ SUBCOMPONENTS
 CONNECTIONS
   generic_sockets_ip_pohic_ip_i_link : BUS ACCESS generic_sockets_ip_pohic_ip_i -> generic_sockets_ip_pohic.link;
 PROPERTIES
-  Taste::APLC_Binding => (reference (on_board_control)) APPLIES TO IV_blsclient;
   Taste::APLC_Binding => (reference (on_board_control)) APPLIES TO IV_aruco_marker_detector;
   Taste::APLC_Binding => (reference (on_board_control)) APPLIES TO IV_RigidBodyStateDispatcher;
+  Taste::APLC_Binding => (reference (on_board_control)) APPLIES TO IV_blsclient;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO on_board_control;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO generic_sockets_ip_pohic;
 END cots_linux_obc.others;

@@ -871,88 +871,6 @@ END JoystickCommandDispatcher.others;
 
 END interfaceview::IV::JoystickCommandDispatcher;
 
-PACKAGE interfaceview::IV::blsclient
-PUBLIC
-
-WITH interfaceview::IV::RigidBodyStateDispatcher;
-WITH Taste;
-WITH DataView;
-WITH TASTE_IV_Properties;
-SUBPROGRAM PI_motion_command
-FEATURES
-  mc : IN PARAMETER DataView::Base_commands_Motion2D {
-    Taste::encoding => NATIVE;
-  };
-PROPERTIES
-  Taste::Associated_Queue_Size => 1;
-END PI_motion_command;
-
-SUBPROGRAM IMPLEMENTATION PI_motion_command.others
-PROPERTIES
-  Compute_Execution_Time => 0 ms .. 20 ms;
-END PI_motion_command.others;
-
-SUBPROGRAM PI_pan_tilt
-FEATURES
-  cmd : IN PARAMETER DataView::Base_commands_Joints {
-    Taste::encoding => NATIVE;
-  };
-PROPERTIES
-  Taste::Associated_Queue_Size => 1;
-END PI_pan_tilt;
-
-SUBPROGRAM IMPLEMENTATION PI_pan_tilt.others
-PROPERTIES
-  Compute_Execution_Time => 0 ms .. 0 ms;
-END PI_pan_tilt.others;
-
-SUBPROGRAM RI_rigidBodyState
-FEATURES
-  smpl : IN PARAMETER DataView::Base_samples_RigidBodyState {
-    Taste::encoding => NATIVE;
-  };
-END RI_rigidBodyState;
-
-SUBPROGRAM IMPLEMENTATION RI_rigidBodyState.others
-END RI_rigidBodyState.others;
-
-SYSTEM blsclient
-FEATURES
-  PI_motion_command : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::blsclient::PI_motion_command.others {
-    Taste::coordinates => "182515 98108";
-    Taste::RCMoperationKind => sporadic;
-    Taste::RCMperiod => 1000 ms;
-    Taste::Deadline => 10 ms;
-    Taste::InterfaceName => "motion_command";
-  };
-  PI_pan_tilt : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::blsclient::PI_pan_tilt.others {
-    Taste::coordinates => "191965 81415";
-    Taste::RCMoperationKind => sporadic;
-    Taste::RCMperiod => 0 ms;
-    Taste::Deadline => 0 ms;
-    Taste::InterfaceName => "pan_tilt";
-  };
-  RI_rigidBodyState : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::RigidBodyStateDispatcher::PI_dispatch.others {
-    Taste::coordinates => "203218 95590";
-    Taste::RCMoperationKind => any;
-    Taste::InterfaceName => "rigidBodyState";
-    Taste::labelInheritance => "false";
-  };
-PROPERTIES
-  Source_Language => (CPP);
-  Taste::Active_Interfaces => any;
-  Source_Text => ("/home/taste/esrocos_workspace/install/share/taste_components/plex-blsclient/blsclient.zip");
-END blsclient;
-
-SYSTEM IMPLEMENTATION blsclient.others
-SUBCOMPONENTS
-  compilerOption : DATA DataView::Taste_directive {
-    Taste::FS_Default_Value => "compiler-option:""-DOROCOS_TARGET=gnulinux""";
-  };
-END blsclient.others;
-
-END interfaceview::IV::blsclient;
-
 PACKAGE interfaceview::IV::aruco_marker_detector
 PUBLIC
 
@@ -1093,6 +1011,105 @@ END RigidBodyStateDispatcher.others;
 
 END interfaceview::IV::RigidBodyStateDispatcher;
 
+PACKAGE interfaceview::IV::blsclient
+PUBLIC
+
+WITH interfaceview::IV::RigidBodyStateDispatcher;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_motion_command
+FEATURES
+  mc : IN PARAMETER DataView::Base_commands_Motion2D {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_motion_command;
+
+SUBPROGRAM IMPLEMENTATION PI_motion_command.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 20 ms;
+END PI_motion_command.others;
+
+SUBPROGRAM PI_pan_tilt
+FEATURES
+  cmd : IN PARAMETER DataView::Base_commands_Joints {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_pan_tilt;
+
+SUBPROGRAM IMPLEMENTATION PI_pan_tilt.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_pan_tilt.others;
+
+SUBPROGRAM PI_clock
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_clock;
+
+SUBPROGRAM IMPLEMENTATION PI_clock.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_clock.others;
+
+SUBPROGRAM RI_rigidBodyState
+FEATURES
+  smpl : IN PARAMETER DataView::Base_samples_RigidBodyState {
+    Taste::encoding => NATIVE;
+  };
+END RI_rigidBodyState;
+
+SUBPROGRAM IMPLEMENTATION RI_rigidBodyState.others
+END RI_rigidBodyState.others;
+
+SYSTEM blsclient
+FEATURES
+  PI_motion_command : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::blsclient::PI_motion_command.others {
+    Taste::coordinates => "175586 91809";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 1000 ms;
+    Taste::Deadline => 10 ms;
+    Taste::InterfaceName => "motion_command";
+  };
+  PI_pan_tilt : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::blsclient::PI_pan_tilt.others {
+    Taste::coordinates => "185036 83462";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "pan_tilt";
+  };
+  PI_clock : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::blsclient::PI_clock.others {
+    Taste::coordinates => "191336 83462";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 100 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "clock";
+  };
+  RI_rigidBodyState : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::RigidBodyStateDispatcher::PI_dispatch.others {
+    Taste::coordinates => "196760 97637";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "rigidBodyState";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (CPP);
+  Taste::Active_Interfaces => any;
+  Source_Text => ("/home/taste/esrocos_workspace/install/share/taste_components/plex-blsclient/blsclient.zip");
+END blsclient;
+
+SYSTEM IMPLEMENTATION blsclient.others
+SUBCOMPONENTS
+  compilerOption : DATA DataView::Taste_directive {
+    Taste::FS_Default_Value => "compiler-option:""-DOROCOS_TARGET=gnulinux""";
+  };
+END blsclient.others;
+
+END interfaceview::IV::blsclient;
+
 PACKAGE interfaceview::IV
 PUBLIC
 
@@ -1109,9 +1126,9 @@ WITH interfaceview::IV::Transformer;
 WITH interfaceview::IV::joystick_2_joint_commands;
 WITH interfaceview::IV::joystick_2_motion_command;
 WITH interfaceview::IV::JoystickCommandDispatcher;
-WITH interfaceview::IV::blsclient;
 WITH interfaceview::IV::aruco_marker_detector;
 WITH interfaceview::IV::RigidBodyStateDispatcher;
+WITH interfaceview::IV::blsclient;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -1167,14 +1184,14 @@ SUBCOMPONENTS
   JoystickCommandDispatcher : SYSTEM interfaceview::IV::JoystickCommandDispatcher::JoystickCommandDispatcher.others {
     Taste::coordinates => "114642 62046 142123 80943";
   };
-  blsclient : SYSTEM interfaceview::IV::blsclient::blsclient.others {
-    Taste::coordinates => "182515 81415 203218 102202";
-  };
   aruco_marker_detector : SYSTEM interfaceview::IV::aruco_marker_detector::aruco_marker_detector.others {
     Taste::coordinates => "158264 109446 186294 122201";
   };
   RigidBodyStateDispatcher : SYSTEM interfaceview::IV::RigidBodyStateDispatcher::RigidBodyStateDispatcher.others {
     Taste::coordinates => "212750 88029 232881 102359";
+  };
+  blsclient : SYSTEM interfaceview::IV::blsclient::blsclient.others {
+    Taste::coordinates => "175586 83462 196760 104722";
   };
 CONNECTIONS
   JoystickCommandDispatcher_PI_dispatch_controldevice_RI_commands : SUBPROGRAM ACCESS JoystickCommandDispatcher.PI_dispatch -> controldevice.RI_commands {
@@ -1190,7 +1207,7 @@ CONNECTIONS
     Taste::coordinates => "116758 99683 121592 99683 121592 90203 126427 90203";
   };
   blsclient_PI_motion_command_MotionCommandDispatcher_RI_sample : SUBPROGRAM ACCESS blsclient.PI_motion_command -> MotionCommandDispatcher.RI_sample {
-    Taste::coordinates => "159248 97761 170881 97761 170881 98108 182515 98108";
+    Taste::coordinates => "159248 97761 167417 97761 167417 91809 175586 91809";
   };
   motion_command2d_logger_PI_sample_MotionCommandDispatcher_RI_sample1 : SUBPROGRAM ACCESS motion_command2d_logger.PI_sample -> MotionCommandDispatcher.RI_sample1 {
     Taste::coordinates => "132724 102254 132724 104992 132722 104992 132722 107004";
@@ -1220,13 +1237,13 @@ CONNECTIONS
     Taste::coordinates => "142123 63621 147831 63621 147831 68030 151019 68030";
   };
   blsclient_PI_pan_tilt_joystick_2_joint_commands_RI_joint_commands : SUBPROGRAM ACCESS blsclient.PI_pan_tilt -> joystick_2_joint_commands.RI_joint_commands {
-    Taste::coordinates => "179365 69605 191965 69605 191965 81415";
+    Taste::coordinates => "179365 69605 185036 69605 185036 83462";
   };
   joystick_2_motion_command_PI_commands_JoystickCommandDispatcher_RI_sample1 : SUBPROGRAM ACCESS joystick_2_motion_command.PI_commands -> JoystickCommandDispatcher.RI_sample1 {
     Taste::coordinates => "127320 80943 127320 84565 111493 84565 111493 88187";
   };
   RigidBodyStateDispatcher_PI_dispatch_blsclient_RI_rigidBodyState : SUBPROGRAM ACCESS RigidBodyStateDispatcher.PI_dispatch -> blsclient.RI_rigidBodyState {
-    Taste::coordinates => "203218 95590 207984 95590 207984 92754 212750 92754";
+    Taste::coordinates => "196760 97637 204755 97637 204755 92754 212750 92754";
   };
 END interfaceview.others;
 
