@@ -349,7 +349,7 @@ FEATURES
   PI_dummy_trigger : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::signal_handler::PI_dummy_trigger.others {
     Taste::coordinates => "97722 108628";
     Taste::RCMoperationKind => cyclic;
-    Taste::RCMperiod => 0 ms;
+    Taste::RCMperiod => 1000 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "dummy_trigger";
   };
@@ -742,10 +742,10 @@ END joystick_2_motion_command;
 SYSTEM IMPLEMENTATION joystick_2_motion_command.others
 SUBCOMPONENTS
   max_rotation_speed : DATA DataView::T_Double {
-    Taste::FS_Default_Value => "90";
+    Taste::FS_Default_Value => "-27.5";
   };
   max_translation_speed : DATA DataView::T_Double {
-    Taste::FS_Default_Value => "0.01";
+    Taste::FS_Default_Value => "-0.04";
   };
   translation_axis : DATA DataView::T_Int8 {
     Taste::FS_Default_Value => "1";
@@ -989,7 +989,7 @@ END PI_motion_command;
 
 SUBPROGRAM IMPLEMENTATION PI_motion_command.others
 PROPERTIES
-  Compute_Execution_Time => 0 ms .. 20 ms;
+  Compute_Execution_Time => 0 ms .. 0 ms;
 END PI_motion_command.others;
 
 SUBPROGRAM PI_pan_tilt
@@ -1031,8 +1031,8 @@ FEATURES
   PI_motion_command : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::blsclient::PI_motion_command.others {
     Taste::coordinates => "175586 91809";
     Taste::RCMoperationKind => sporadic;
-    Taste::RCMperiod => 1000 ms;
-    Taste::Deadline => 10 ms;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
     Taste::InterfaceName => "motion_command";
   };
   PI_pan_tilt : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::blsclient::PI_pan_tilt.others {
