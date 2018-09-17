@@ -237,7 +237,7 @@ END PI_updateRigidBodyState.others;
 SYSTEM vizkit3drobotpose
 FEATURES
   PI_updateRigidBodyState : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::vizkit3drobotpose::PI_updateRigidBodyState.others {
-    Taste::coordinates => "255905 88015";
+    Taste::coordinates => "255769 88151";
     Taste::RCMoperationKind => sporadic;
     Taste::RCMperiod => 0 ms;
     Taste::Deadline => 0 ms;
@@ -255,7 +255,7 @@ SUBCOMPONENTS
     Taste::FS_Default_Value => """config-bodystate.yml""";
   };
   id : DATA DataView::Vizkit3D_PluginLabel {
-    Taste::FS_Default_Value => """robotPose""";
+    Taste::FS_Default_Value => """rbs""";
   };
   compilerOption : DATA DataView::Taste_directive {
     Taste::FS_Default_Value => "compiler-option:""-DOROCOS_TARGET=gnulinux""";
@@ -572,7 +572,7 @@ END PI_relativeMarkerPose.others;
 
 SUBPROGRAM RI_absoluteMarkerPose
 FEATURES
-  sample : IN PARAMETER DataView::Base_samples_RigidBodyState {
+  rbstate : IN PARAMETER DataView::Base_samples_RigidBodyState {
     Taste::encoding => UPER;
   };
 END RI_absoluteMarkerPose;
@@ -1102,7 +1102,7 @@ FEATURES
 PROPERTIES
   Source_Language => (CPP);
   Taste::Active_Interfaces => enabled;
-  Source_Text => ("/root/esrocos_workspace/install/share/taste_components/plex-pose_visualisation/vizkit3dmarkerpose.zip");
+  Source_Text => ("/home/taste/esrocos_workspace/install/share/taste_components/plex-pose_visualisation/vizkit3dmarkerpose.zip");
 END vizkit3dmarkerpose;
 
 SYSTEM IMPLEMENTATION vizkit3dmarkerpose.others
@@ -1164,7 +1164,7 @@ SUBCOMPONENTS
 --vizkit3d plugin RigidBodyStateVisualization. 
 --]
   vizkit3drobotpose : SYSTEM interfaceview::IV::vizkit3drobotpose::vizkit3drobotpose.others {
-    Taste::coordinates => "243037 78236 267982 88015";
+    Taste::coordinates => "242901 78372 267846 88151";
   };
   motion_command2d_logger : SYSTEM interfaceview::IV::motion_command2d_logger::motion_command2d_logger.others {
     Taste::coordinates => "116579 107004 152942 121340";
@@ -1226,7 +1226,7 @@ CONNECTIONS
     Taste::coordinates => "132724 102254 132724 104992 132722 104992 132722 107004";
   };
   vizkit3drobotpose_PI_updateRigidBodyState_RigidBodyStateDispatcher_RI_sample : SUBPROGRAM ACCESS vizkit3drobotpose.PI_updateRigidBodyState -> RigidBodyStateDispatcher.RI_sample {
-    Taste::coordinates => "232881 92125 255905 92125 255905 88015";
+    Taste::coordinates => "232881 92125 255769 92125 255769 88151";
   };
   motion_command2d_logger_PI_shutdown_signal_handler_RI_shutdown : SUBPROGRAM ACCESS motion_command2d_logger.PI_shutdown -> signal_handler.RI_shutdown {
     Taste::coordinates => "107958 116743 113470 116743 113470 116742 116579 116742";
