@@ -143,7 +143,7 @@ END interfaceview::IV::gr740_candriver;
 PACKAGE interfaceview::IV::MotionCommandDispatcher
 PUBLIC
 
-WITH interfaceview::IV::blsclient;
+WITH interfaceview::IV::Watchdog;
 WITH interfaceview::IV::motion_command2d_logger;
 WITH Taste;
 WITH DataView;
@@ -164,7 +164,7 @@ END PI_dispatch_motion_command.others;
 
 SUBPROGRAM RI_sample
 FEATURES
-  mc : IN PARAMETER DataView::Base_commands_Motion2D {
+  cmd_val : IN PARAMETER DataView::Base_commands_Motion2D {
     Taste::encoding => NATIVE;
   };
 END RI_sample;
@@ -191,8 +191,8 @@ FEATURES
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "dispatch_motion_command";
   };
-  RI_sample : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::blsclient::PI_motion_command.others {
-    Taste::coordinates => "159248 97761";
+  RI_sample : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::Watchdog::PI_test_cmd.others {
+    Taste::coordinates => "156374 97761";
     Taste::RCMoperationKind => any;
     Taste::InterfaceName => "sample";
     Taste::labelInheritance => "false";
@@ -1029,28 +1029,28 @@ END RI_rigidBodyState.others;
 SYSTEM blsclient
 FEATURES
   PI_motion_command : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::blsclient::PI_motion_command.others {
-    Taste::coordinates => "175586 91809";
+    Taste::coordinates => "185192 89289";
     Taste::RCMoperationKind => sporadic;
     Taste::RCMperiod => 0 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "motion_command";
   };
   PI_pan_tilt : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::blsclient::PI_pan_tilt.others {
-    Taste::coordinates => "185036 83462";
+    Taste::coordinates => "190390 80942";
     Taste::RCMoperationKind => sporadic;
     Taste::RCMperiod => 0 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "pan_tilt";
   };
   PI_clock : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::blsclient::PI_clock.others {
-    Taste::coordinates => "191336 83462";
+    Taste::coordinates => "196690 80942";
     Taste::RCMoperationKind => cyclic;
     Taste::RCMperiod => 100 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "clock";
   };
   RI_rigidBodyState : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::RigidBodyStateDispatcher::PI_dispatch.others {
-    Taste::coordinates => "196760 97637";
+    Taste::coordinates => "205034 95117";
     Taste::RCMoperationKind => any;
     Taste::InterfaceName => "rigidBodyState";
     Taste::labelInheritance => "false";
@@ -1120,6 +1120,80 @@ END vizkit3dmarkerpose.others;
 
 END interfaceview::IV::vizkit3dmarkerpose;
 
+PACKAGE interfaceview::IV::Watchdog
+PUBLIC
+
+WITH interfaceview::IV::blsclient;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_purge
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_purge;
+
+SUBPROGRAM IMPLEMENTATION PI_purge.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_purge.others;
+
+SUBPROGRAM PI_test_cmd
+FEATURES
+  cmd_val : IN PARAMETER DataView::Base_commands_Motion2D {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_test_cmd;
+
+SUBPROGRAM IMPLEMENTATION PI_test_cmd.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_test_cmd.others;
+
+SUBPROGRAM RI_mot_cmd
+FEATURES
+  mc : IN PARAMETER DataView::Base_commands_Motion2D {
+    Taste::encoding => NATIVE;
+  };
+END RI_mot_cmd;
+
+SUBPROGRAM IMPLEMENTATION RI_mot_cmd.others
+END RI_mot_cmd.others;
+
+SYSTEM Watchdog
+FEATURES
+  PI_purge : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Watchdog::PI_purge.others {
+    Taste::coordinates => "166296 88344";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 80 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "purge";
+  };
+  PI_test_cmd : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Watchdog::PI_test_cmd.others {
+    Taste::coordinates => "161571 93069";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "test_cmd";
+  };
+  RI_mot_cmd : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::blsclient::PI_motion_command.others {
+    Taste::coordinates => "177003 98108";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "mot_cmd";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (CPP);
+  Taste::Active_Interfaces => any;
+  Source_Text => ("/home/taste/esrocos_workspace/install/plex/watchdog/watchdog.zip");
+END Watchdog;
+
+SYSTEM IMPLEMENTATION Watchdog.others
+END Watchdog.others;
+
+END interfaceview::IV::Watchdog;
+
 PACKAGE interfaceview::IV
 PUBLIC
 
@@ -1139,6 +1213,7 @@ WITH interfaceview::IV::aruco_marker_detector;
 WITH interfaceview::IV::RigidBodyStateDispatcher;
 WITH interfaceview::IV::blsclient;
 WITH interfaceview::IV::vizkit3dmarkerpose;
+WITH interfaceview::IV::Watchdog;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -1157,7 +1232,7 @@ SUBCOMPONENTS
     Taste::coordinates => "231335 58939 255237 75309";
   };
   MotionCommandDispatcher : SYSTEM interfaceview::IV::MotionCommandDispatcher::MotionCommandDispatcher.others {
-    Taste::coordinates => "126427 87681 159248 102254";
+    Taste::coordinates => "126427 87681 156374 102254";
     Taste::Fill_Color => "#FFD700";
   };
 -- [ interfaceview::IV::interfaceview.others.vizkit3drobotpose - text 
@@ -1183,7 +1258,7 @@ SUBCOMPONENTS
     Taste::coordinates => "238104 111336 261410 126297";
   };
   joystick_2_joint_commands : SYSTEM interfaceview::IV::joystick_2_joint_commands::joystick_2_joint_commands.others {
-    Taste::coordinates => "151019 66455 179365 80470";
+    Taste::coordinates => "151019 62518 179365 80470";
   };
   joystick_2_motion_command : SYSTEM interfaceview::IV::joystick_2_motion_command::joystick_2_motion_command.others {
     Taste::coordinates => "88029 88187 116758 102832";
@@ -1198,13 +1273,16 @@ SUBCOMPONENTS
     Taste::coordinates => "212750 88029 232881 102359";
   };
   blsclient : SYSTEM interfaceview::IV::blsclient::blsclient.others {
-    Taste::coordinates => "175586 83462 196760 104722";
+    Taste::coordinates => "185192 80942 205034 102202";
   };
 -- [ interfaceview::IV::interfaceview.others.vizkit3dmarkerpose - text 
 --vizkit3d plugin RigidBodyStateVisualization. 
 --]
   vizkit3dmarkerpose : SYSTEM interfaceview::IV::vizkit3dmarkerpose::vizkit3dmarkerpose.others {
     Taste::coordinates => "241730 95628 267592 107933";
+  };
+  Watchdog : SYSTEM interfaceview::IV::Watchdog::Watchdog.others {
+    Taste::coordinates => "161571 88344 177003 101415";
   };
 CONNECTIONS
   JoystickCommandDispatcher_PI_dispatch_controldevice_RI_commands : SUBPROGRAM ACCESS JoystickCommandDispatcher.PI_dispatch -> controldevice.RI_commands {
@@ -1219,8 +1297,8 @@ CONNECTIONS
   MotionCommandDispatcher_PI_dispatch_motion_command_joystick_2_motion_command_RI_motion_commands : SUBPROGRAM ACCESS MotionCommandDispatcher.PI_dispatch_motion_command -> joystick_2_motion_command.RI_motion_commands {
     Taste::coordinates => "116758 99683 121592 99683 121592 90203 126427 90203";
   };
-  blsclient_PI_motion_command_MotionCommandDispatcher_RI_sample : SUBPROGRAM ACCESS blsclient.PI_motion_command -> MotionCommandDispatcher.RI_sample {
-    Taste::coordinates => "159248 97761 167417 97761 167417 91809 175586 91809";
+  Watchdog_PI_test_cmd_MotionCommandDispatcher_RI_sample : SUBPROGRAM ACCESS Watchdog.PI_test_cmd -> MotionCommandDispatcher.RI_sample {
+    Taste::coordinates => "156374 97761 158972 97761 158972 93069 161571 93069";
   };
   motion_command2d_logger_PI_sample_MotionCommandDispatcher_RI_sample1 : SUBPROGRAM ACCESS motion_command2d_logger.PI_sample -> MotionCommandDispatcher.RI_sample1 {
     Taste::coordinates => "132724 102254 132724 104992 132722 104992 132722 107004";
@@ -1250,13 +1328,16 @@ CONNECTIONS
     Taste::coordinates => "142123 63621 147831 63621 147831 68030 151019 68030";
   };
   blsclient_PI_pan_tilt_joystick_2_joint_commands_RI_joint_commands : SUBPROGRAM ACCESS blsclient.PI_pan_tilt -> joystick_2_joint_commands.RI_joint_commands {
-    Taste::coordinates => "179365 69605 185036 69605 185036 83462";
+    Taste::coordinates => "179365 69605 190390 69605 190390 80942";
   };
   joystick_2_motion_command_PI_commands_JoystickCommandDispatcher_RI_sample1 : SUBPROGRAM ACCESS joystick_2_motion_command.PI_commands -> JoystickCommandDispatcher.RI_sample1 {
     Taste::coordinates => "127320 80943 127320 84565 111493 84565 111493 88187";
   };
   RigidBodyStateDispatcher_PI_dispatch_blsclient_RI_rigidBodyState : SUBPROGRAM ACCESS RigidBodyStateDispatcher.PI_dispatch -> blsclient.RI_rigidBodyState {
-    Taste::coordinates => "196760 97637 204755 97637 204755 92754 212750 92754";
+    Taste::coordinates => "205034 95117 208892 95117 208892 92754 212750 92754";
+  };
+  blsclient_PI_motion_command_Watchdog_RI_mot_cmd : SUBPROGRAM ACCESS blsclient.PI_motion_command -> Watchdog.RI_mot_cmd {
+    Taste::coordinates => "177003 98108 181097 98108 181097 89289 185192 89289";
   };
 END interfaceview.others;
 

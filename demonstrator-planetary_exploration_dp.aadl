@@ -124,6 +124,7 @@ WITH deploymentview::DV::remote_control_pc;
 WITH interfaceview::IV::aruco_marker_detector;
 WITH interfaceview::IV::RigidBodyStateDispatcher;
 WITH interfaceview::IV::blsclient;
+WITH interfaceview::IV::Watchdog;
 WITH deploymentview::DV::cots_linux_obc;
 WITH interfaceview::IV::gr740_candriver;
 WITH interfaceview::IV::oscillate;
@@ -212,6 +213,9 @@ SUBCOMPONENTS
   IV_blsclient : SYSTEM interfaceview::IV::blsclient::blsclient.others {
     Taste::FunctionName => "blsclient";
   };
+  IV_Watchdog : SYSTEM interfaceview::IV::Watchdog::Watchdog.others {
+    Taste::FunctionName => "Watchdog";
+  };
   on_board_control : PROCESS deploymentview::DV::cots_linux_obc::on_board_control.others {
     Taste::coordinates => "145766 53806 175800 80968";
     Deployment::Port_Number => 0;
@@ -228,6 +232,7 @@ PROPERTIES
   Taste::APLC_Binding => (reference (on_board_control)) APPLIES TO IV_aruco_marker_detector;
   Taste::APLC_Binding => (reference (on_board_control)) APPLIES TO IV_RigidBodyStateDispatcher;
   Taste::APLC_Binding => (reference (on_board_control)) APPLIES TO IV_blsclient;
+  Taste::APLC_Binding => (reference (on_board_control)) APPLIES TO IV_Watchdog;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO on_board_control;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO generic_sockets_ip_pohic;
 END cots_linux_obc.others;
@@ -301,11 +306,11 @@ CONNECTIONS
     Taste::coordinates => "227553 98265 227553 121820 212386 121820";
   };
 PROPERTIES
-  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.blsclient_PI_motion_command_MotionCommandDispatcher_RI_sample;
+  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.Watchdog_PI_test_cmd_MotionCommandDispatcher_RI_sample;
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.vizkit3drobotpose_PI_updateRigidBodyState_RigidBodyStateDispatcher_RI_sample;
-  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.vizkit3dmarkerpose_PI_updateRigidBodyState_Transformer_RI_absoluteMarkerPose;
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.gr740_stream_aligner_PI_A_RigidBodyStateDispatcher_RI_sample1;
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.gr740_stream_aligner_PI_B_aruco_marker_detector_RI_pose;
+  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.vizkit3dmarkerpose_PI_updateRigidBodyState_Transformer_RI_absoluteMarkerPose;
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.blsclient_PI_pan_tilt_joystick_2_joint_commands_RI_joint_commands;
 END deploymentview.others;
 
