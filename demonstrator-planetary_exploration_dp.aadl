@@ -123,8 +123,9 @@ WITH ocarina_processors_x86;
 WITH deploymentview::DV::remote_control_pc;
 WITH interfaceview::IV::aruco_marker_detector;
 WITH interfaceview::IV::RigidBodyStateDispatcher;
-WITH interfaceview::IV::blsclient;
 WITH interfaceview::IV::Watchdog;
+WITH interfaceview::IV::blsclient;
+WITH interfaceview::IV::dummylights;
 WITH deploymentview::DV::cots_linux_obc;
 WITH interfaceview::IV::gr740_candriver;
 WITH interfaceview::IV::oscillate;
@@ -210,11 +211,14 @@ SUBCOMPONENTS
   IV_RigidBodyStateDispatcher : SYSTEM interfaceview::IV::RigidBodyStateDispatcher::RigidBodyStateDispatcher.others {
     Taste::FunctionName => "RigidBodyStateDispatcher";
   };
+  IV_Watchdog : SYSTEM interfaceview::IV::Watchdog::Watchdog.others {
+    Taste::FunctionName => "Watchdog";
+  };
   IV_blsclient : SYSTEM interfaceview::IV::blsclient::blsclient.others {
     Taste::FunctionName => "blsclient";
   };
-  IV_Watchdog : SYSTEM interfaceview::IV::Watchdog::Watchdog.others {
-    Taste::FunctionName => "Watchdog";
+  IV_dummylights : SYSTEM interfaceview::IV::dummylights::dummylights.others {
+    Taste::FunctionName => "dummylights";
   };
   on_board_control : PROCESS deploymentview::DV::cots_linux_obc::on_board_control.others {
     Taste::coordinates => "145766 53806 175800 80968";
@@ -231,8 +235,9 @@ CONNECTIONS
 PROPERTIES
   Taste::APLC_Binding => (reference (on_board_control)) APPLIES TO IV_aruco_marker_detector;
   Taste::APLC_Binding => (reference (on_board_control)) APPLIES TO IV_RigidBodyStateDispatcher;
-  Taste::APLC_Binding => (reference (on_board_control)) APPLIES TO IV_blsclient;
   Taste::APLC_Binding => (reference (on_board_control)) APPLIES TO IV_Watchdog;
+  Taste::APLC_Binding => (reference (on_board_control)) APPLIES TO IV_blsclient;
+  Taste::APLC_Binding => (reference (on_board_control)) APPLIES TO IV_dummylights;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO on_board_control;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO generic_sockets_ip_pohic;
 END cots_linux_obc.others;
@@ -311,7 +316,6 @@ PROPERTIES
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.gr740_stream_aligner_PI_A_RigidBodyStateDispatcher_RI_sample1;
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.gr740_stream_aligner_PI_B_aruco_marker_detector_RI_pose;
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.vizkit3dmarkerpose_PI_updateRigidBodyState_Transformer_RI_absoluteMarkerPose;
-  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.blsclient_PI_pan_tilt_joystick_2_joint_commands_RI_joint_commands;
 END deploymentview.others;
 
 PROPERTIES
