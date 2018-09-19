@@ -553,7 +553,7 @@ END PI_robotPose;
 
 SUBPROGRAM IMPLEMENTATION PI_robotPose.others
 PROPERTIES
-  Compute_Execution_Time => 0 ms .. 100 ms;
+  Compute_Execution_Time => 0 ms .. 0 ms;
 END PI_robotPose.others;
 
 SUBPROGRAM PI_relativeMarkerPose
@@ -567,7 +567,7 @@ END PI_relativeMarkerPose;
 
 SUBPROGRAM IMPLEMENTATION PI_relativeMarkerPose.others
 PROPERTIES
-  Compute_Execution_Time => 0 ms .. 100 ms;
+  Compute_Execution_Time => 0 ms .. 0 ms;
 END PI_relativeMarkerPose.others;
 
 SUBPROGRAM RI_absoluteMarkerPose
@@ -585,15 +585,15 @@ FEATURES
   PI_robotPose : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Transformer::PI_robotPose.others {
     Taste::coordinates => "238104 113383";
     Taste::RCMoperationKind => sporadic;
-    Taste::RCMperiod => 1000 ms;
-    Taste::Deadline => 1000 ms;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
     Taste::InterfaceName => "robotPose";
   };
   PI_relativeMarkerPose : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Transformer::PI_relativeMarkerPose.others {
     Taste::coordinates => "238104 124565";
     Taste::RCMoperationKind => sporadic;
-    Taste::RCMperiod => 1000 ms;
-    Taste::Deadline => 1000 ms;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
     Taste::InterfaceName => "relativeMarkerPose";
   };
   RI_absoluteMarkerPose : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::vizkit3dmarkerpose::PI_updateRigidBodyState.others {
@@ -1049,7 +1049,7 @@ END PI_motion_command;
 
 SUBPROGRAM IMPLEMENTATION PI_motion_command.others
 PROPERTIES
-  Compute_Execution_Time => 0 ms .. 20 ms;
+  Compute_Execution_Time => 0 ms .. 0 ms;
 END PI_motion_command.others;
 
 SUBPROGRAM PI_pan_tilt
@@ -1067,8 +1067,6 @@ PROPERTIES
 END PI_pan_tilt.others;
 
 SUBPROGRAM PI_clock
-PROPERTIES
-  Taste::Associated_Queue_Size => 1;
 END PI_clock;
 
 SUBPROGRAM IMPLEMENTATION PI_clock.others
@@ -1111,8 +1109,8 @@ FEATURES
   PI_motion_command : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::blsclient::PI_motion_command.others {
     Taste::coordinates => "184349 96162";
     Taste::RCMoperationKind => sporadic;
-    Taste::RCMperiod => 1000 ms;
-    Taste::Deadline => 10 ms;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
     Taste::InterfaceName => "motion_command";
   };
   PI_pan_tilt : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::blsclient::PI_pan_tilt.others {
@@ -1125,7 +1123,7 @@ FEATURES
   PI_clock : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::blsclient::PI_clock.others {
     Taste::coordinates => "201696 84271";
     Taste::RCMoperationKind => cyclic;
-    Taste::RCMperiod => 1000 ms;
+    Taste::RCMperiod => 100 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "clock";
   };
@@ -1158,7 +1156,7 @@ END blsclient;
 SYSTEM IMPLEMENTATION blsclient.others
 SUBCOMPONENTS
   compilerOption : DATA DataView::Taste_directive {
-    Taste::FS_Default_Value => "compiler-option:""-DOROCOS_TARGET=gnulinux -DDUMMY""";
+    Taste::FS_Default_Value => "compiler-option:""-DOROCOS_TARGET=gnulinux""";
   };
 END blsclient.others;
 
