@@ -154,6 +154,8 @@ WITH interfaceview::IV::vizkit3dmarkerpose;
 WITH interfaceview::IV::JoystickCommandDispatcher3;
 WITH interfaceview::IV::joystick_2_lights;
 WITH interfaceview::IV::joystick_2_joint_commands;
+WITH interfaceview::IV::vizkit3dmarkerpose2;
+WITH interfaceview::IV::markermux;
 WITH ocarina_processors_x86;
 WITH deploymentview::DV::remote_control_pc;
 WITH interfaceview::IV::RigidBodyStateDispatcher;
@@ -210,6 +212,12 @@ SUBCOMPONENTS
   IV_joystick_2_joint_commands : SYSTEM interfaceview::IV::joystick_2_joint_commands::joystick_2_joint_commands.others {
     Taste::FunctionName => "joystick_2_joint_commands";
   };
+  IV_vizkit3dmarkerpose2 : SYSTEM interfaceview::IV::vizkit3dmarkerpose2::vizkit3dmarkerpose2.others {
+    Taste::FunctionName => "vizkit3dmarkerpose2";
+  };
+  IV_markermux : SYSTEM interfaceview::IV::markermux::markermux.others {
+    Taste::FunctionName => "markermux";
+  };
   remote_control : PROCESS deploymentview::DV::remote_control_pc::remote_control.others {
     Taste::coordinates => "91210 53709 122305 86179";
     Deployment::Port_Number => 0;
@@ -233,6 +241,8 @@ PROPERTIES
   Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_JoystickCommandDispatcher3;
   Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_joystick_2_lights;
   Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_joystick_2_joint_commands;
+  Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_vizkit3dmarkerpose2;
+  Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_markermux;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO remote_control;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO generic_sockets_ip_pohic;
 END remote_control_pc.others;
@@ -380,7 +390,7 @@ PROPERTIES
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.vizkit3drobotpose_PI_updateRigidBodyState_RigidBodyStateDispatcher_RI_sample;
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.gr740_stream_aligner_PI_A_RigidBodyStateDispatcher_RI_sample1;
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.gr740_stream_aligner_PI_B_aruco_marker_detector_RI_pose;
-  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.vizkit3dmarkerpose_PI_updateRigidBodyState_Transformer_RI_absoluteMarkerPose;
+  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.markermux_PI_dispatch_Transformer_RI_absoluteMarkerPose;
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.blsclient_PI_pan_tilt_joystick_2_joint_commands_RI_joint_commands;
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.blsclient_PI_setWhiteLights_joystick_2_lights_RI_white_lights;
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.blsclient_PI_setUVLights_joystick_2_lights_RI_uv_lights;

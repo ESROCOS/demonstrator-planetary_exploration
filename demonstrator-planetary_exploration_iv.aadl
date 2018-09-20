@@ -538,7 +538,7 @@ END interfaceview::IV::gr740_stream_aligner;
 PACKAGE interfaceview::IV::Transformer
 PUBLIC
 
-WITH interfaceview::IV::vizkit3dmarkerpose;
+WITH interfaceview::IV::markermux;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -572,7 +572,7 @@ END PI_relativeMarkerPose.others;
 
 SUBPROGRAM RI_absoluteMarkerPose
 FEATURES
-  rbstate : IN PARAMETER DataView::Base_samples_RigidBodyState {
+  rbs : IN PARAMETER DataView::Base_samples_RigidBodyState {
     Taste::encoding => UPER;
   };
 END RI_absoluteMarkerPose;
@@ -583,21 +583,21 @@ END RI_absoluteMarkerPose.others;
 SYSTEM Transformer
 FEATURES
   PI_robotPose : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Transformer::PI_robotPose.others {
-    Taste::coordinates => "238104 113383";
+    Taste::coordinates => "235062 111888";
     Taste::RCMoperationKind => sporadic;
     Taste::RCMperiod => 0 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "robotPose";
   };
   PI_relativeMarkerPose : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::Transformer::PI_relativeMarkerPose.others {
-    Taste::coordinates => "238104 124565";
+    Taste::coordinates => "235062 120510";
     Taste::RCMoperationKind => sporadic;
     Taste::RCMperiod => 0 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "relativeMarkerPose";
   };
-  RI_absoluteMarkerPose : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::vizkit3dmarkerpose::PI_updateRigidBodyState.others {
-    Taste::coordinates => "261410 115987";
+  RI_absoluteMarkerPose : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::markermux::PI_dispatch.others {
+    Taste::coordinates => "258368 114398";
     Taste::RCMoperationKind => any;
     Taste::InterfaceName => "absoluteMarkerPose";
     Taste::labelInheritance => "false";
@@ -856,7 +856,7 @@ END PI_updateRigidBodyState.others;
 SYSTEM vizkit3dmarkerpose
 FEATURES
   PI_updateRigidBodyState : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::vizkit3dmarkerpose::PI_updateRigidBodyState.others {
-    Taste::coordinates => "241730 105016";
+    Taste::coordinates => "268485 131381";
     Taste::RCMoperationKind => sporadic;
     Taste::RCMperiod => 0 ms;
     Taste::Deadline => 0 ms;
@@ -993,6 +993,8 @@ PROPERTIES
 END PI_pan_tilt.others;
 
 SUBPROGRAM PI_clock
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
 END PI_clock;
 
 SUBPROGRAM IMPLEMENTATION PI_clock.others
@@ -1057,7 +1059,7 @@ FEATURES
   PI_clock : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::blsclient::PI_clock.others {
     Taste::coordinates => "202556 85390";
     Taste::RCMoperationKind => cyclic;
-    Taste::RCMperiod => 200 ms;
+    Taste::RCMperiod => 100 ms;
     Taste::Deadline => 0 ms;
     Taste::InterfaceName => "clock";
   };
@@ -1337,6 +1339,136 @@ END joystick_2_joint_commands.others;
 
 END interfaceview::IV::joystick_2_joint_commands;
 
+PACKAGE interfaceview::IV::vizkit3dmarkerpose2
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_updateRigidBodyState
+FEATURES
+  rbstate : IN PARAMETER DataView::Base_samples_RigidBodyState {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_updateRigidBodyState;
+
+SUBPROGRAM IMPLEMENTATION PI_updateRigidBodyState.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_updateRigidBodyState.others;
+
+SYSTEM vizkit3dmarkerpose2
+FEATURES
+  PI_updateRigidBodyState : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::vizkit3dmarkerpose2::PI_updateRigidBodyState.others {
+    Taste::coordinates => "265222 147186";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "updateRigidBodyState";
+  };
+PROPERTIES
+  Source_Language => (CPP);
+  Taste::Active_Interfaces => enabled;
+  Source_Text => ("/home/taste/esrocos_workspace/install/share/taste_components/plex-pose_visualisation/vizkit3dmarkerpose2.zip");
+END vizkit3dmarkerpose2;
+
+SYSTEM IMPLEMENTATION vizkit3dmarkerpose2.others
+SUBCOMPONENTS
+  configFile : DATA DataView::Vizkit3D_FilePath {
+    Taste::FS_Default_Value => """config-bodystate.yml""";
+  };
+  id : DATA DataView::Vizkit3D_PluginLabel {
+    Taste::FS_Default_Value => """mbs2""";
+  };
+  compilerOption : DATA DataView::Taste_directive {
+    Taste::FS_Default_Value => "compiler-option:""-DOROCOS_TARGET=gnulinux""";
+  };
+END vizkit3dmarkerpose2.others;
+
+END interfaceview::IV::vizkit3dmarkerpose2;
+
+PACKAGE interfaceview::IV::markermux
+PUBLIC
+
+WITH interfaceview::IV::vizkit3dmarkerpose;
+WITH interfaceview::IV::vizkit3dmarkerpose2;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_dispatch
+FEATURES
+  rbs : IN PARAMETER DataView::Base_samples_RigidBodyState {
+    Taste::encoding => UPER;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_dispatch;
+
+SUBPROGRAM IMPLEMENTATION PI_dispatch.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_dispatch.others;
+
+SUBPROGRAM RI_update0
+FEATURES
+  rbstate : IN PARAMETER DataView::Base_samples_RigidBodyState {
+    Taste::encoding => UPER;
+  };
+END RI_update0;
+
+SUBPROGRAM IMPLEMENTATION RI_update0.others
+END RI_update0.others;
+
+SUBPROGRAM RI_update1
+FEATURES
+  rbstate : IN PARAMETER DataView::Base_samples_RigidBodyState {
+    Taste::encoding => UPER;
+  };
+END RI_update1;
+
+SUBPROGRAM IMPLEMENTATION RI_update1.others
+END RI_update1.others;
+
+SYSTEM markermux
+FEATURES
+  PI_dispatch : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::markermux::PI_dispatch.others {
+    Taste::coordinates => "263394 99562";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "dispatch";
+  };
+  RI_update0 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::vizkit3dmarkerpose::PI_updateRigidBodyState.others {
+    Taste::coordinates => "284416 111167";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "update0";
+    Taste::labelInheritance => "false";
+  };
+  RI_update1 : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::vizkit3dmarkerpose2::PI_updateRigidBodyState.others {
+    Taste::coordinates => "275292 111167";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "update1";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (CPP);
+  Taste::Active_Interfaces => any;
+END markermux;
+
+SYSTEM IMPLEMENTATION markermux.others
+SUBCOMPONENTS
+  marker0 : DATA DataView::T_Int32 {
+    Taste::FS_Default_Value => "352";
+  };
+  marker1 : DATA DataView::T_Int32 {
+    Taste::FS_Default_Value => "404";
+  };
+END markermux.others;
+
+END interfaceview::IV::markermux;
+
 PACKAGE interfaceview::IV
 PUBLIC
 
@@ -1358,6 +1490,8 @@ WITH interfaceview::IV::blsclient;
 WITH interfaceview::IV::JoystickCommandDispatcher3;
 WITH interfaceview::IV::joystick_2_lights;
 WITH interfaceview::IV::joystick_2_joint_commands;
+WITH interfaceview::IV::vizkit3dmarkerpose2;
+WITH interfaceview::IV::markermux;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -1399,7 +1533,7 @@ SUBCOMPONENTS
     Taste::coordinates => "201343 109259 227011 123117";
   };
   Transformer : SYSTEM interfaceview::IV::Transformer::Transformer.others {
-    Taste::coordinates => "238104 111336 261410 126297";
+    Taste::coordinates => "235062 109841 258368 124802";
   };
   joystick_2_motion_command : SYSTEM interfaceview::IV::joystick_2_motion_command::joystick_2_motion_command.others {
     Taste::coordinates => "88029 88187 116758 102832";
@@ -1414,7 +1548,7 @@ SUBCOMPONENTS
 --vizkit3d plugin RigidBodyStateVisualization. 
 --]
   vizkit3dmarkerpose : SYSTEM interfaceview::IV::vizkit3dmarkerpose::vizkit3dmarkerpose.others {
-    Taste::coordinates => "241730 95628 267592 107933";
+    Taste::coordinates => "268485 121993 294347 134298";
   };
   Watchdog : SYSTEM interfaceview::IV::Watchdog::Watchdog.others {
     Taste::coordinates => "161571 88344 177003 101415";
@@ -1430,6 +1564,15 @@ SUBCOMPONENTS
   };
   joystick_2_joint_commands : SYSTEM interfaceview::IV::joystick_2_joint_commands::joystick_2_joint_commands.others {
     Taste::coordinates => "167156 51621 189089 66040";
+  };
+-- [ interfaceview::IV::interfaceview.others.vizkit3dmarkerpose2 - text 
+--vizkit3d plugin RigidBodyStateVisualization. 
+--]
+  vizkit3dmarkerpose2 : SYSTEM interfaceview::IV::vizkit3dmarkerpose2::vizkit3dmarkerpose2.others {
+    Taste::coordinates => "265222 138759 291084 151064";
+  };
+  markermux : SYSTEM interfaceview::IV::markermux::markermux.others {
+    Taste::coordinates => "263394 96147 290360 111167";
   };
 CONNECTIONS
   JoystickCommandDispatcher3_PI_dispatch_controldevice_RI_commands : SUBPROGRAM ACCESS JoystickCommandDispatcher3.PI_dispatch -> controldevice.RI_commands {
@@ -1463,19 +1606,22 @@ CONNECTIONS
     Taste::coordinates => "188024 118484 193144 118484 193144 118709 201343 118709";
   };
   Transformer_PI_robotPose_gr740_stream_aligner_RI_aligned_A : SUBPROGRAM ACCESS Transformer.PI_robotPose -> gr740_stream_aligner.RI_aligned_A {
-    Taste::coordinates => "227011 110834 231883 110834 231883 113383 238104 113383";
+    Taste::coordinates => "227011 110834 231883 110834 231883 111888 235062 111888";
   };
   Transformer_PI_relativeMarkerPose_gr740_stream_aligner_RI_aligned_B : SUBPROGRAM ACCESS Transformer.PI_relativeMarkerPose -> gr740_stream_aligner.RI_aligned_B {
-    Taste::coordinates => "227011 120914 231883 120914 231883 124565 238104 124565";
+    Taste::coordinates => "227011 120914 231883 120914 231883 120510 235062 120510";
   };
-  vizkit3dmarkerpose_PI_updateRigidBodyState_Transformer_RI_absoluteMarkerPose : SUBPROGRAM ACCESS vizkit3dmarkerpose.PI_updateRigidBodyState -> Transformer.RI_absoluteMarkerPose {
-    Taste::coordinates => "261410 115987 264477 115987 264477 110501 238663 110501 238663 105016 241730 105016";
+  markermux_PI_dispatch_Transformer_RI_absoluteMarkerPose : SUBPROGRAM ACCESS markermux.PI_dispatch -> Transformer.RI_absoluteMarkerPose {
+    Taste::coordinates => "258368 114398 260154 114398 260154 111821 260431 111821 260431 99562 263394 99562";
   };
   joystick_2_motion_command_PI_commands_JoystickCommandDispatcher3_RI_sample0 : SUBPROGRAM ACCESS joystick_2_motion_command.PI_commands -> JoystickCommandDispatcher3.RI_sample0 {
     Taste::coordinates => "117843 82194 111493 82194 111493 88187";
   };
   RigidBodyStateDispatcher_PI_dispatch_blsclient_RI_rigidBodyState : SUBPROGRAM ACCESS RigidBodyStateDispatcher.PI_dispatch -> blsclient.RI_rigidBodyState {
     Taste::coordinates => "204324 92215 208481 92215 208481 92754 212750 92754";
+  };
+  vizkit3dmarkerpose_PI_updateRigidBodyState_markermux_RI_update0 : SUBPROGRAM ACCESS vizkit3dmarkerpose.PI_updateRigidBodyState -> markermux.RI_update0 {
+    Taste::coordinates => "284416 111167 284416 119563 265390 119563 265390 131381 268485 131381";
   };
   blsclient_PI_motion_command_Watchdog_RI_mot_cmd : SUBPROGRAM ACCESS blsclient.PI_motion_command -> Watchdog.RI_mot_cmd {
     Taste::coordinates => "177003 91290 179584 91290 179584 96412 182276 96412";
@@ -1494,6 +1640,9 @@ CONNECTIONS
   };
   joystick_2_joint_commands_PI_commands_JoystickCommandDispatcher3_RI_sample2 : SUBPROGRAM ACCESS joystick_2_joint_commands.PI_commands -> JoystickCommandDispatcher3.RI_sample2 {
     Taste::coordinates => "140652 68511 140652 52968 167156 52968";
+  };
+  vizkit3dmarkerpose2_PI_updateRigidBodyState_markermux_RI_update1 : SUBPROGRAM ACCESS vizkit3dmarkerpose2.PI_updateRigidBodyState -> markermux.RI_update1 {
+    Taste::coordinates => "275292 111167 275292 117075 262366 117075 262366 147186 265222 147186";
   };
 END interfaceview.others;
 
