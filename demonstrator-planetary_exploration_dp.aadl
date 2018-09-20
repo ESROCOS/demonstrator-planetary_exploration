@@ -394,6 +394,7 @@ PROPERTIES
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.blsclient_PI_pan_tilt_joystick_2_joint_commands_RI_joint_commands;
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.blsclient_PI_setWhiteLights_joystick_2_lights_RI_white_lights;
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.blsclient_PI_setUVLights_joystick_2_lights_RI_uv_lights;
+  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.blsclient_PI_setPointTurn_joystick_2_lights_RI_point_turn_mode;
 END deploymentview.others;
 
 PROPERTIES
