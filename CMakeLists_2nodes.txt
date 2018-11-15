@@ -32,13 +32,10 @@ esrocos_init()
 
 #uncomment if you want to add dependencies for the build process (only required in integration projects)
 esrocos_add_dependency(PARTITION remote_control
-                       MODULES   controldev eigen3 plex-pose_visualisation data_logger)
+                       MODULES   controldev eigen3 plex-pose_visualisation data_logger opencv aruco)
 
-esrocos_add_dependency(PARTITION on_board_control
-                       MODULES   eigen3 base_support mc_watchdog_bip plex-bridget)
-
-esrocos_add_dependency(PARTITION on_board_perception
-                       MODULES   eigen3 base_support opencv aruco)
+#esrocos_add_dependency(PARTITION on_board_control
+#                       MODULES   eigen3 base_support opencv aruco)
 
 esrocos_add_dependency(PARTITION gr740_partition
                        MODULES   eigen3)

@@ -26,7 +26,7 @@ FEATURES
     Taste::coordinates => "105667 98686";
   };
 PROPERTIES
-  Taste::Interface_Coordinates => "115461 131304" APPLIES TO link;
+  Taste::Interface_Coordinates => "115786 122765" APPLIES TO link;
   Deployment::Help => "Write your ASN.1 configuration here";
   Deployment::Configuration => "{devname ""enp0s3"", address ""192.168.0.56"", port 5116}";
   Deployment::Config => "/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/ip.asn";
@@ -60,7 +60,7 @@ FEATURES
     Taste::coordinates => "160310 98108";
   };
 PROPERTIES
-  Taste::Interface_Coordinates => "160033 118233" APPLIES TO link;
+  Taste::Interface_Coordinates => "160358 109694" APPLIES TO link;
   Deployment::Help => "Write your ASN.1 configuration here";
   Deployment::Configuration => "{devname ""enp0s3"", address ""192.168.0.9"", port 5116}";
   Deployment::Config => "/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/ip.asn";
@@ -94,7 +94,7 @@ FEATURES
     Taste::coordinates => "227553 98265";
   };
 PROPERTIES
-  Taste::Interface_Coordinates => "212061 130359" APPLIES TO link;
+  Taste::Interface_Coordinates => "212386 121820" APPLIES TO link;
   Deployment::Help => "Write your ASN.1 configuration here";
   Deployment::Configuration => "{devname ""greth1"", address ""192.168.0.42"", gateway ""192.168.0.1"", netmask ""255.255.255.0"", version ipv4, port 5118 }";
   Deployment::Config => "/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/ip.asn";
@@ -111,18 +111,24 @@ PACKAGE deploymentview::DV
 PUBLIC
 
 WITH interfaceview::IV::controldevice;
-WITH interfaceview::IV::JoystickCommandDispatcher;
-WITH interfaceview::IV::joystick_2_joint_commands;
-WITH interfaceview::IV::joystick_2_motion_command;
-WITH interfaceview::IV::dump_joint_commands;
-WITH interfaceview::IV::motion_command2d_logger;
 WITH interfaceview::IV::MotionCommandDispatcher;
 WITH interfaceview::IV::vizkit3drobotpose;
+WITH interfaceview::IV::motion_command2d_logger;
+WITH interfaceview::IV::signal_handler;
+WITH interfaceview::IV::vizkit3dmarkerpose;
+WITH interfaceview::IV::joystick_2_joint_commands;
+WITH interfaceview::IV::joystick_2_motion_command;
+WITH interfaceview::IV::JoystickCommandDispatcher;
 WITH ocarina_processors_x86;
 WITH deploymentview::DV::remote_control_pc;
 WITH interfaceview::IV::blsclient;
+WITH interfaceview::IV::aruco_marker_detector;
+WITH interfaceview::IV::RigidBodyStateDispatcher;
 WITH deploymentview::DV::cots_linux_obc;
 WITH interfaceview::IV::gr740_candriver;
+WITH interfaceview::IV::oscillate;
+WITH interfaceview::IV::gr740_stream_aligner;
+WITH interfaceview::IV::Transformer;
 WITH ocarina_processors_leon;
 WITH deploymentview::DV::GR740;
 WITH ocarina_buses;
@@ -140,8 +146,20 @@ SUBCOMPONENTS
   IV_controldevice : SYSTEM interfaceview::IV::controldevice::controldevice.others {
     Taste::FunctionName => "controldevice";
   };
-  IV_JoystickCommandDispatcher : SYSTEM interfaceview::IV::JoystickCommandDispatcher::JoystickCommandDispatcher.others {
-    Taste::FunctionName => "JoystickCommandDispatcher";
+  IV_MotionCommandDispatcher : SYSTEM interfaceview::IV::MotionCommandDispatcher::MotionCommandDispatcher.others {
+    Taste::FunctionName => "MotionCommandDispatcher";
+  };
+  IV_vizkit3drobotpose : SYSTEM interfaceview::IV::vizkit3drobotpose::vizkit3drobotpose.others {
+    Taste::FunctionName => "vizkit3drobotpose";
+  };
+  IV_motion_command2d_logger : SYSTEM interfaceview::IV::motion_command2d_logger::motion_command2d_logger.others {
+    Taste::FunctionName => "motion_command2d_logger";
+  };
+  IV_signal_handler : SYSTEM interfaceview::IV::signal_handler::signal_handler.others {
+    Taste::FunctionName => "signal_handler";
+  };
+  IV_vizkit3dmarkerpose : SYSTEM interfaceview::IV::vizkit3dmarkerpose::vizkit3dmarkerpose.others {
+    Taste::FunctionName => "vizkit3dmarkerpose";
   };
   IV_joystick_2_joint_commands : SYSTEM interfaceview::IV::joystick_2_joint_commands::joystick_2_joint_commands.others {
     Taste::FunctionName => "joystick_2_joint_commands";
@@ -149,39 +167,31 @@ SUBCOMPONENTS
   IV_joystick_2_motion_command : SYSTEM interfaceview::IV::joystick_2_motion_command::joystick_2_motion_command.others {
     Taste::FunctionName => "joystick_2_motion_command";
   };
-  IV_dump_joint_commands : SYSTEM interfaceview::IV::dump_joint_commands::dump_joint_commands.others {
-    Taste::FunctionName => "dump_joint_commands";
-  };
-  IV_motion_command2d_logger : SYSTEM interfaceview::IV::motion_command2d_logger::motion_command2d_logger.others {
-    Taste::FunctionName => "motion_command2d_logger";
-  };
-  IV_MotionCommandDispatcher : SYSTEM interfaceview::IV::MotionCommandDispatcher::MotionCommandDispatcher.others {
-    Taste::FunctionName => "MotionCommandDispatcher";
-  };
-  IV_vizkit3drobotpose : SYSTEM interfaceview::IV::vizkit3drobotpose::vizkit3drobotpose.others {
-    Taste::FunctionName => "vizkit3drobotpose";
+  IV_JoystickCommandDispatcher : SYSTEM interfaceview::IV::JoystickCommandDispatcher::JoystickCommandDispatcher.others {
+    Taste::FunctionName => "JoystickCommandDispatcher";
   };
   remote_control : PROCESS deploymentview::DV::remote_control_pc::remote_control.others {
-    Taste::coordinates => "92815 55170 122143 82255";
+    Taste::coordinates => "91210 53709 122305 86179";
     Deployment::Port_Number => 0;
   };
   x86_linux : PROCESSOR ocarina_processors_x86::x86.linux {
-    Taste::coordinates => "89148 47432 125808 84722";
+    Taste::coordinates => "89310 45971 125970 87477";
   };
   generic_sockets_ip_pohic : DEVICE deploymentview::DV::remote_control_pc::generic_sockets_ip_pohic.others {
-    Taste::coordinates => "89604 87506 123461 98686";
+    Taste::coordinates => "89604 89911 123461 98686";
   };
 CONNECTIONS
   generic_sockets_ip_pohic_ip_i_link : BUS ACCESS generic_sockets_ip_pohic_ip_i -> generic_sockets_ip_pohic.link;
 PROPERTIES
   Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_controldevice;
-  Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_JoystickCommandDispatcher;
-  Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_joystick_2_joint_commands;
-  Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_joystick_2_motion_command;
-  Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_dump_joint_commands;
-  Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_motion_command2d_logger;
   Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_MotionCommandDispatcher;
   Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_vizkit3drobotpose;
+  Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_motion_command2d_logger;
+  Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_signal_handler;
+  Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_vizkit3dmarkerpose;
+  Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_joystick_2_joint_commands;
+  Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_joystick_2_motion_command;
+  Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_JoystickCommandDispatcher;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO remote_control;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO generic_sockets_ip_pohic;
 END remote_control_pc.others;
@@ -195,6 +205,12 @@ SYSTEM IMPLEMENTATION cots_linux_obc.others
 SUBCOMPONENTS
   IV_blsclient : SYSTEM interfaceview::IV::blsclient::blsclient.others {
     Taste::FunctionName => "blsclient";
+  };
+  IV_aruco_marker_detector : SYSTEM interfaceview::IV::aruco_marker_detector::aruco_marker_detector.others {
+    Taste::FunctionName => "aruco_marker_detector";
+  };
+  IV_RigidBodyStateDispatcher : SYSTEM interfaceview::IV::RigidBodyStateDispatcher::RigidBodyStateDispatcher.others {
+    Taste::FunctionName => "RigidBodyStateDispatcher";
   };
   on_board_control : PROCESS deploymentview::DV::cots_linux_obc::on_board_control.others {
     Taste::coordinates => "145766 53806 175800 80968";
@@ -210,6 +226,8 @@ CONNECTIONS
   generic_sockets_ip_pohic_ip_i_link : BUS ACCESS generic_sockets_ip_pohic_ip_i -> generic_sockets_ip_pohic.link;
 PROPERTIES
   Taste::APLC_Binding => (reference (on_board_control)) APPLIES TO IV_blsclient;
+  Taste::APLC_Binding => (reference (on_board_control)) APPLIES TO IV_aruco_marker_detector;
+  Taste::APLC_Binding => (reference (on_board_control)) APPLIES TO IV_RigidBodyStateDispatcher;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO on_board_control;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO generic_sockets_ip_pohic;
 END cots_linux_obc.others;
@@ -223,6 +241,15 @@ SYSTEM IMPLEMENTATION GR740.others
 SUBCOMPONENTS
   IV_gr740_candriver : SYSTEM interfaceview::IV::gr740_candriver::gr740_candriver.others {
     Taste::FunctionName => "gr740_candriver";
+  };
+  IV_oscillate : SYSTEM interfaceview::IV::oscillate::oscillate.others {
+    Taste::FunctionName => "oscillate";
+  };
+  IV_gr740_stream_aligner : SYSTEM interfaceview::IV::gr740_stream_aligner::gr740_stream_aligner.others {
+    Taste::FunctionName => "gr740_stream_aligner";
+  };
+  IV_Transformer : SYSTEM interfaceview::IV::Transformer::Transformer.others {
+    Taste::FunctionName => "Transformer";
   };
   gr740_partition : PROCESS deploymentview::DV::GR740::gr740_partition.others {
     Taste::coordinates => "207441 55444 242311 83378";
@@ -238,6 +265,9 @@ CONNECTIONS
   leon_ethernet_greth_ip_i_link : BUS ACCESS leon_ethernet_greth_ip_i -> leon_ethernet_greth.link;
 PROPERTIES
   Taste::APLC_Binding => (reference (gr740_partition)) APPLIES TO IV_gr740_candriver;
+  Taste::APLC_Binding => (reference (gr740_partition)) APPLIES TO IV_oscillate;
+  Taste::APLC_Binding => (reference (gr740_partition)) APPLIES TO IV_gr740_stream_aligner;
+  Taste::APLC_Binding => (reference (gr740_partition)) APPLIES TO IV_Transformer;
   Actual_Processor_Binding => (reference (gr740_rtems51_posix)) APPLIES TO gr740_partition;
   Actual_Processor_Binding => (reference (gr740_rtems51_posix)) APPLIES TO leon_ethernet_greth;
 END GR740.others;
@@ -257,24 +287,26 @@ SUBCOMPONENTS
     Taste::coordinates => "197633 41731 252119 102202";
   };
   ip_i : BUS ocarina_buses::ip.i {
-    Taste::coordinates => "115461 118233 212061 144374";
+    Taste::coordinates => "115786 109694 212386 154892";
   };
   interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
 CONNECTIONS
   Connection2 : BUS ACCESS ip_i -> remote_control_pc.generic_sockets_ip_pohic_ip_i {
-    Taste::coordinates => "105667 98686 105667 131304 115461 131304";
+    Taste::coordinates => "105667 98686 105667 122765 115786 122765";
   };
   Connection3 : BUS ACCESS ip_i -> cots_linux_obc.generic_sockets_ip_pohic_ip_i {
-    Taste::coordinates => "160310 98108 160310 108170 160033 108170 160033 118233";
+    Taste::coordinates => "160310 98108 160310 108170 160358 108170 160358 109694";
   };
   Connection1 : BUS ACCESS ip_i -> GR740.leon_ethernet_greth_ip_i {
-    Taste::coordinates => "227553 98265 227553 130359 212061 130359";
+    Taste::coordinates => "227553 98265 227553 121820 212386 121820";
   };
 PROPERTIES
-  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.gr740_candriver_PI_commands_joystick_2_joint_commands_RI_joint_commands;
-  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.dump_joint_commands_PI_commands_gr740_candriver_RI_samples;
   Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.blsclient_PI_motion_command_MotionCommandDispatcher_RI_sample;
-  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.vizkit3drobotpose_PI_updateRigidBodyState_blsclient_RI_rigidBodyState;
+  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.vizkit3drobotpose_PI_updateRigidBodyState_RigidBodyStateDispatcher_RI_sample;
+  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.vizkit3dmarkerpose_PI_updateRigidBodyState_Transformer_RI_absoluteMarkerPose;
+  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.gr740_stream_aligner_PI_A_RigidBodyStateDispatcher_RI_sample1;
+  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.gr740_stream_aligner_PI_B_aruco_marker_detector_RI_pose;
+  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.blsclient_PI_pan_tilt_joystick_2_joint_commands_RI_joint_commands;
 END deploymentview.others;
 
 PROPERTIES
